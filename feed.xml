@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>My gh-pages</title>
+  <subtitle>Blog description</subtitle>
+  <id>http://shinaisan.github.io</id>
+  <link href="http://shinaisan.github.io"/>
+  <link href="http://shinaisan.github.io/feed.xml" rel="self"/>
+  <updated>2015-08-01T13:59:00Z</updated>
+  <author>
+    <name>M. Shiina</name>
+  </author>
+  <entry>
+    <title>0-1 Knapsack Problem Sample Implementation</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/08/01/0-1-knapsack-problem-sample-implementation.html"/>
+    <id>http://shinaisan.github.io/2015/08/01/0-1-knapsack-problem-sample-implementation.html</id>
+    <published>2015-08-01T13:59:00Z</published>
+    <updated>2015-08-01T14:00:09+00:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="problem-statement"&gt;Problem Statement&lt;/h3&gt;
+
+&lt;p&gt;The 0-1 knapsack problem: find the maximum profit \(p\) below, by choosing items to put in the knapsack whose capacity is given by \(w\). There are \(n\) items and each item \(i,\ (1\leq i\leq n)\) has a weight \(w_i\) and a decision variable \(x_i\) that takes 1 if the item \(i\) is selected or 0 otherwise.&lt;/p&gt;
+
+&lt;div&gt;
+\[
+\begin{align*}
+&amp;amp; &amp;amp;&amp;amp; p = \max_{1\leq i\leq n}{p_i x_i} \\
+&amp;amp; \text{subject to} &amp;amp;&amp;amp;
+\sum_{i = 1}^n{w_i x_i} \leq w \\
+&amp;amp; &amp;amp;&amp;amp; x_i \in \left\{0, 1\right\}
+\end{align*}
+\]
+&lt;/div&gt;
+
+&lt;h3 id="sample-implementation"&gt;Sample Implementation&lt;/h3&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/142117ca2271d58db152.js"&gt;&lt;/script&gt;
+
+&lt;h3 id="input"&gt;Input&lt;/h3&gt;
+
+&lt;p&gt;The format of the problem input for the above code is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;[The capacity of the knapsack (w)]&lt;/code&gt; &lt;code&gt;[The number of items (n)]&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;For each item[k] (k = 1, 2, …, n) in turn:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code&gt;[Weight]&lt;/code&gt; &lt;code&gt;[Profit]&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="dynamic-programing"&gt;Dynamic Programing&lt;/h3&gt;
+
+&lt;p&gt;The code above implements psuedo-polynomial time algorithm using dynamic programming.
+Assuming that \(\mathrm{dp}_{{i - 1},\ {x}}\) holds the solution of the smaller problem with \(n = i - 1\) and \(w = x\), the solution for \(n = i\) and \(w = x\) can be given by the following formula.&lt;/p&gt;
+
+&lt;div&gt;
+\[
+ \mathrm{dp}_{i,\ x} =
+ \begin{cases}
+ \mathrm{dp}_{{i - 1},\ x} &amp;amp; \mbox{if } x \lt w_i
+ \\
+ \min\left\{ \mathrm{dp}_{{i - 1},_ x} ,\ \mathrm{dp}_{{i - 1},\ {x - w_i}} + p_i \right\}
+ &amp;amp; \mbox{if } x \geq w_i
+ \end{cases}
+\]
+&lt;/div&gt;
+
+&lt;p&gt;And obviously \(\mathrm{dp}_{0,\ x} = 0\).&lt;/p&gt;
+
+&lt;p&gt;The solution is \(\mathrm{dp}_{n,\ w}\).&lt;/p&gt;
+
+&lt;h3 id="backtracking"&gt;Backtracking&lt;/h3&gt;
+
+&lt;p&gt;The indices of chosen items in the optimal solution can be obtained by backtracking the above algorithm.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Initialize \(x \leftarrow w\).&lt;/li&gt;
+  &lt;li&gt;If \(\mathrm{dp}_ {n,\ x} \neq \mathrm{dp}_ {{n - 1},\ x}\), the item \(n\) was selected, so update 
+\(x \leftarrow x - w_n\). Leave \(x\) unchanged otherwise.&lt;/li&gt;
+  &lt;li&gt;If \(\mathrm{dp}_ {{n - 1}, x} \neq \mathrm{dp}_ {{n - 2}, x}\), the item \(n - 1\) was selected, so update \(x \leftarrow x - w_ {n - 1}\). Leave \(x\) unchanged otherwise.&lt;/li&gt;
+  &lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  <entry>
+    <title>Some Practice Examples of Range Minimum Query (RMQ)</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/07/31/some-practice-examples-of-range-minimum-query-rmq.html"/>
+    <id>http://shinaisan.github.io/2015/07/31/some-practice-examples-of-range-minimum-query-rmq.html</id>
+    <published>2015-07-31T12:34:00Z</published>
+    <updated>2015-08-02T00:25:01+00:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="range-minimum-query-rmq"&gt;Range Minimum Query (RMQ)&lt;/h3&gt;
+
+&lt;p&gt;RMQ can be used to query minimum/maximum value in a specified interval with time complexity of \(O(\log n)\).&lt;/p&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/ebad4d2b1aa62a0529ca.js"&gt;&lt;/script&gt;
+
+&lt;h3 id="templated-oo-version"&gt;Templated OO Version&lt;/h3&gt;
+
+&lt;p&gt;Here is another implementation sample of RMQ in a templated OO style.
+It may be better if it has the ability to change the &lt;code&gt;min&lt;/code&gt; function to &lt;code&gt;max&lt;/code&gt; or similar.
+However, I think that the plain old procedural style is satisfactory in most cases and this kind of generality is not necessary.&lt;/p&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/46b77f9650bda9fd7c4a.js"&gt;&lt;/script&gt;
+
+</content>
+  </entry>
+  <entry>
+    <title>Setting up Python virtualenv with virtualenvwrapper on Ubuntu/EC2</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/07/11/setting-up-python-virtualenv-with-virtualenvwrapper-on-ubuntu-ec2.html"/>
+    <id>http://shinaisan.github.io/2015/07/11/setting-up-python-virtualenv-with-virtualenvwrapper-on-ubuntu-ec2.html</id>
+    <published>2015-07-11T14:06:00Z</published>
+    <updated>2015-08-02T00:25:07+00:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="installing-virtualenvwrapper"&gt;Installing virtualenvwrapper&lt;/h3&gt;
+
+&lt;p&gt;There is a package of virtualenvwrapper and can easily be installed with &lt;code&gt;apt-get&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;sudo apt-get install virtualenvwrapper
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To see what files are installed:&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;dpkg -L virtualenvwrapper
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The initialization script &lt;code&gt;virtualenvwrapper.sh&lt;/code&gt; is placed in &lt;code&gt;/usr/share/virtualenvwrapper/&lt;/code&gt;, instead of &lt;code&gt;/usr/local/bin/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id="settings-in-bashrc"&gt;Settings in .bashrc&lt;/h3&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;WORKON_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;/.virtualenvs
+&lt;span class="nb"&gt;source&lt;/span&gt; /usr/share/virtualenvwrapper/virtualenvwrapper.sh 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="making-virtualenv"&gt;Making virtualenv&lt;/h3&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;mkvirtualenv env1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="installing-packages-and-switching-env"&gt;Installing Packages and Switching Env&lt;/h3&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;workon env1 &lt;span class="c"&gt;# Not needed if it is right after mkvirtualenv.&lt;/span&gt;
+&lt;span class="gp"&gt;(env1)$ &lt;/span&gt;pip install networkx
+&lt;span class="gp"&gt;(env1)$ &lt;/span&gt;lssitepackages &lt;span class="c"&gt;# To see the package is installed.&lt;/span&gt;
+&lt;span class="gp"&gt;(env1)$ &lt;/span&gt;mkvirtualenv env2 &lt;span class="c"&gt;# Switching env to another one.&lt;/span&gt;
+&lt;span class="gp"&gt;(env2)$ &lt;/span&gt;pip install pygments
+&lt;span class="gp"&gt;(env2)$ &lt;/span&gt;lssitepackages
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="removing-env"&gt;Removing Env&lt;/h3&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;(env2)$ &lt;/span&gt;deactivate
+&lt;span class="gp"&gt;$ &lt;/span&gt;rmvirtualenv env2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="references"&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code&gt;virtualenvwrapper.sh&lt;/code&gt; script itself.&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://virtualenvwrapper.readthedocs.org/"&gt;virtualenvwrapper 4.5.1.dev19&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  <entry>
+    <title>Building and Installing Ruby with rbenv on Ubuntu/EC2</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/06/16/building-and-installing-ruby-with-rbenv-on-ubuntu-ec2.html"/>
+    <id>http://shinaisan.github.io/2015/06/16/building-and-installing-ruby-with-rbenv-on-ubuntu-ec2.html</id>
+    <published>2015-06-16T23:08:00Z</published>
+    <updated>2015-08-02T00:24:54+00:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;Below are some excerpts of my command history when I set up the rbenv to install ruby and some gems.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="environment"&gt;Environment&lt;/h3&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;uname -a
+Linux xxx 3.13.0-44-generic &lt;span class="c"&gt;#73-Ubuntu SMP Tue Dec 16 00:22:43 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="installing-rbenv"&gt;Installing rbenv&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/sstephenson/rbenv"&gt;sstephenson/rbenv&lt;/a&gt; enables to switch Ruby versions in an application-specific manner. It can be installed by cloning the rbenv repository from GitHub. In the following example, rbenv is installed under the home directory.&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;'export PATH="$HOME/.rbenv/bin:$PATH"'&lt;/span&gt; &amp;gt;&amp;gt; ~/.bashrc
+&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;'eval "$(rbenv init -)"'&lt;/span&gt; &amp;gt;&amp;gt; ~/.bashrc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="installing-ruby-build"&gt;Installing ruby-build&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/sstephenson/ruby-build"&gt;sstephenson/ruby-build&lt;/a&gt; is a plugin for &lt;code&gt;rbenv&lt;/code&gt; that builds a specific version of Ruby.&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="building-and-installing-ruby"&gt;Building and Installing Ruby&lt;/h3&gt;
+
+&lt;p&gt;On Ubuntu, the following packages are required to build Ruby &lt;sup id="fnref:build-on-ubuntu"&gt;&lt;a href="#fn:build-on-ubuntu" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;sudo apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The following command installs v2.0.0-p645 and selects it as the global Ruby version:&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;rbenv install 2.0.0-p645
+&lt;span class="gp"&gt;$ &lt;/span&gt;rbenv global 2.0.0-p645
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="installing-rbenv-gemset"&gt;Installing rbenv-gemset&lt;/h3&gt;
+
+&lt;p&gt;The rbenv-gemset plugin enables to set up and maintain application-specific gemsets.
+It can be installed in the same way as other plugins.&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;git clone git://github.com/jf/rbenv-gemset.git &lt;span class="nv"&gt;$HOME&lt;/span&gt;/.rbenv/plugins/rbenv-gemset
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="creating-a-new-gemset"&gt;Creating a New Gemset&lt;/h3&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;rbenv gemset create 2.0.0-p645 new-gemset
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can specify the newly created gemset in an application directory:&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;application-directory
+&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo &lt;/span&gt;new-gemset &amp;gt; .rbenv-gemsets
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can confirm the currently active gemset:&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;rbenv gemset active
+&lt;span class="gp"&gt;$ &lt;/span&gt;rbenv gemset file
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="references"&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://github.com/sstephenson/rbenv"&gt;sstephenson/rbenv&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://github.com/sstephenson/ruby-build"&gt;sstephenson/ruby-build&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;div class="footnotes"&gt;
+  &lt;ol&gt;
+    &lt;li id="fn:build-on-ubuntu"&gt;
+      &lt;p&gt;&lt;a href="https://github.com/sstephenson/ruby-build/wiki#suggested-build-environment"&gt;Suggested build environment&lt;/a&gt; &lt;a href="#fnref:build-on-ubuntu" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Starting a Blog with Middleman</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/06/03/starting-a-blog-with-middleman.html"/>
+    <id>http://shinaisan.github.io/2015/06/03/starting-a-blog-with-middleman.html</id>
+    <published>2015-06-03T01:12:00Z</published>
+    <updated>2015-08-01T03:47:10+00:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;Blogging with a static site generator seemed easy to me, but there were a couple of steps just to start blogging. I selected Middleman as the blogging framework and wrote rough notes below of the steps required to generate this page.
+The following procedures are of course very specific to this site.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="getting-middleman-blog-bootstrap-template"&gt;Getting middleman-blog-bootstrap-template&lt;/h3&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;mkdir ~/.middleman
+git clone https://github.com/biblichor/middleman-blog-bootstrap-template.git ~/.middleman/blog-bootstrap
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="making-a-fresh-blog-project"&gt;Making a Fresh Blog Project&lt;/h3&gt;
+
+&lt;p&gt;The option &lt;code&gt;--template=blog-bootstrap&lt;/code&gt; of &lt;code&gt;middleman init&lt;/code&gt; is specified to use the template.
+Node.js and Bower are also required to run &lt;code&gt;bower install&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;mkdir my-gh-pages
+middleman init --template&lt;span class="o"&gt;=&lt;/span&gt;blog-bootstrap
+bower install
+bundle &lt;span class="nb"&gt;exec &lt;/span&gt;middleman server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By accessing port 4567 (by default) with the web browser, we can see how the pages are generated.
+Thanks to the nice template by &lt;a href="https://github.com/biblichor/middleman-blog-bootstrap-template"&gt;biblichor&lt;/a&gt;, they look pretty good without any tuning.&lt;/p&gt;
+
+&lt;h3 id="creating-a-new-article"&gt;Creating a New Article&lt;/h3&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;bundle &lt;span class="nb"&gt;exec &lt;/span&gt;middleman article &lt;span class="s2"&gt;"TITLE"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="mathjax"&gt;MathJax&lt;/h3&gt;
+
+&lt;p&gt;The following single line inserted in the &lt;code&gt;source/layouts/layout.slim&lt;/code&gt; file enables rendering of math.&lt;/p&gt;
+
+&lt;pre class="highlight slim"&gt;&lt;code&gt;    &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;javascript_include_tag&lt;/span&gt; &lt;span class="s2"&gt;"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;p&gt;\[
+{F_n} = \frac{({1 + \sqrt{5}})^n - ({1 - \sqrt{5}})^n}{{2^n}\sqrt{5}}
+\]&lt;/p&gt;
+
+&lt;h3 id="marking-an-article-as-draft"&gt;Marking an Article as Draft&lt;/h3&gt;
+
+&lt;p&gt;Articles marked as draft by turning off published flag in frontmatter will not be published.
+The contents of draft articles can still be checked by accessing the preview server (&lt;code&gt;middleman server&lt;/code&gt;)
+and they are not deployed with &lt;code&gt;middleman deploy&lt;/code&gt;.
+After checking has been done, the finished works are deployed by removing &lt;code&gt;published false&lt;/code&gt; from the frontmatter and calling &lt;code&gt;middleman deploy&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre class="highlight yaml"&gt;&lt;code&gt;&lt;span class="nn"&gt;---&lt;/span&gt;
+&lt;span class="s"&gt;title&lt;/span&gt;&lt;span class="pi"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;lt;title&amp;gt;&lt;/span&gt;
+&lt;span class="s"&gt;published&lt;/span&gt;&lt;span class="pi"&gt;:&lt;/span&gt; &lt;span class="s"&gt;false&lt;/span&gt;
+&lt;span class="nn"&gt;---&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="references"&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://middlemanapp.com/"&gt;Middleman: Hand-crafted frontend development&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.staticgen.com/"&gt;Top Open-Source Static Site Generators - StaticGen&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://github.com/biblichor/middleman-blog-bootstrap-template"&gt;biblichor/middleman-blog-bootstrap-template · GitHub&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+</feed>
