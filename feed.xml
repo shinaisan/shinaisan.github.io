@@ -5,10 +5,27 @@
   <id>http://shinaisan.github.io</id>
   <link href="http://shinaisan.github.io"/>
   <link href="http://shinaisan.github.io/feed.xml" rel="self"/>
-  <updated>2015-08-01T13:59:00Z</updated>
+  <updated>2015-08-02T07:51:00Z</updated>
   <author>
     <name>M. Shiina</name>
   </author>
+  <entry>
+    <title>Trying out git-submodule</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/08/02/trying-out-git-submodule.html"/>
+    <id>http://shinaisan.github.io/2015/08/02/trying-out-git-submodule.html</id>
+    <published>2015-08-02T07:51:00Z</published>
+    <updated>2015-08-02T07:51:58+00:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;T/O&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/85292c94d9c15a60abd4.js"&gt;&lt;/script&gt;
+
+</content>
+  </entry>
   <entry>
     <title>0-1 Knapsack Problem Sample Implementation</title>
     <link rel="alternate" href="http://shinaisan.github.io/2015/08/01/0-1-knapsack-problem-sample-implementation.html"/>

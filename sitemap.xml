@@ -7,6 +7,12 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>http://shinaisan.github.io/2015/08/02/trying-out-git-submodule.html</loc>
+    <lastmod>2015-08-02</lastmod>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>http://shinaisan.github.io/2015/06/16/building-and-installing-ruby-with-rbenv-on-ubuntu-ec2.html</loc>
     <lastmod>2015-08-02</lastmod>
     <priority>0.7</priority>
@@ -50,6 +56,12 @@
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/snippet.html</loc>
+    <lastmod>2015-06-02</lastmod>
+    <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>http://shinaisan.github.io/tags/git.html</loc>
     <lastmod>2015-06-02</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
@@ -100,6 +112,12 @@
     <loc>http://shinaisan.github.io/2015/08.html</loc>
     <lastmod>2015-06-02</lastmod>
     <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>http://shinaisan.github.io/2015/08/02.html</loc>
+    <lastmod>2015-06-02</lastmod>
+    <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
