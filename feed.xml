@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>My gh-pages</title>
+  <subtitle>Blog description</subtitle>
+  <id>http://shinaisan.github.io</id>
+  <link href="http://shinaisan.github.io"/>
+  <link href="http://shinaisan.github.io/feed.xml" rel="self"/>
+  <updated>2015-12-22T14:14:00Z</updated>
+  <author>
+    <name>M. Shiina</name>
+  </author>
+  <entry>
+    <title>Browsing Task Dependencies in the Rakefile of mruby using jsTree</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/12/22/browsing-task-dependencies-in-the-rakefile-of-mruby-using-jstree.html"/>
+    <id>http://shinaisan.github.io/2015/12/22/browsing-task-dependencies-in-the-rakefile-of-mruby-using-jstree.html</id>
+    <published>2015-12-22T14:14:00Z</published>
+    <updated>2017-04-21T07:46:05+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;Building mruby is not just about compiling C sources and linking objects together but also contains some nontrivial steps like invocation of mrbc that is also built with the mruby build system.
+The Rakefiles of mruby are not easy read. To get a better grasp of what the task dependency structure looks like, I had to create a visual aid below.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="browsing-dependency-tree-strucutre"&gt;Browsing Dependency Tree Strucutre&lt;/h3&gt;
+
+&lt;div&gt;
+&lt;script type="text/javascript" src="http://jsdo.it/blogparts/Cf9i/js?width=800&amp;amp;height=496&amp;amp;view=readme"&gt;&lt;/script&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This tree view allows us to navigate from the root &lt;code&gt;all&lt;/code&gt; node to every task it depends. Some nodes are links to another node that is typically a library or a tool that is referred from many other tasks. This linking feature is for preventing the tree from repeating the same substructures and eventually growing too big.&lt;/p&gt;
+
+&lt;p&gt;Some nodes contain additional information that is displayed on the right side. Currently it contains only "defining actions" indicating the location of its definition.&lt;/p&gt;
+
+&lt;p&gt;By traversing the tree structure, I could make some inferences below whether they be correct or not …&lt;/p&gt;
+
+&lt;h4 id="libmrubya-forms-the-basis-for-the-main-executable-targets"&gt;libmruby.a forms the basis for the main executable targets&lt;/h4&gt;
+
+&lt;p&gt;&lt;img alt="libmruby.a" src="../../../images/img-2015-12-22/libmruby_a.png" /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;mruby&lt;/code&gt; and &lt;code&gt;mirb&lt;/code&gt; depend on it.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;mrbc&lt;/code&gt; does not but depends on &lt;code&gt;libmruby_core.a&lt;/code&gt; that looks much alike &lt;code&gt;libmruby.a&lt;/code&gt; but does not contain mrbgems.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;mrbtest&lt;/code&gt; depends on both &lt;code&gt;libmruby.a&lt;/code&gt; and &lt;code&gt;libmruby_core.a&lt;/code&gt; for some reason. (Would someone please tell me why?)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id="mrbc-is-used-to-generate-geminitc"&gt;&lt;code&gt;mrbc&lt;/code&gt; is used to generate geminit.c&lt;/h4&gt;
+
+&lt;p&gt;&lt;img alt="mrbc" src="../../../images/img-2015-12-22/geminit_c_and_mrbc.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;For example, &lt;code&gt;mrbgems/mruby-sprintf/gem_init.o&lt;/code&gt; seems to be compiled from &lt;code&gt;gem_init.c&lt;/code&gt; that depends on &lt;code&gt;mrbc&lt;/code&gt; and a Ruby script in &lt;code&gt;mrblib&lt;/code&gt;.
+This suggests that &lt;code&gt;mrbc&lt;/code&gt; generates a part of or all of the &lt;code&gt;gem_init.c&lt;/code&gt;.
+Browsing the C source soon reveals a byte-code looking code snippet that presumably is the output of &lt;code&gt;mrbc&lt;/code&gt; taking the mrblib as an input.
+I am not sure why &lt;code&gt;gem_init.c&lt;/code&gt; depends on &lt;code&gt;tasks/mrbgem_spec.rake&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id="the-ruby-scripts-in-testt-convert-into-c-source-to-build-mrbtest"&gt;The Ruby scripts in &lt;code&gt;test/t/&lt;/code&gt; convert into C source to build &lt;code&gt;mrbtest&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;&lt;img alt="mrbtest" src="../../../images/img-2015-12-22/mrbtest_Dependency.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;It was not clear to me what the scripts in &lt;code&gt;test/t&lt;/code&gt; directory are for.
+The dependency tree gave me a hint that the &lt;code&gt;mrbc&lt;/code&gt; tool is used to generate a part of &lt;code&gt;mrbtest&lt;/code&gt;. The &lt;code&gt;mrbtest&lt;/code&gt; tool depends also on &lt;code&gt;mrbtest.a&lt;/code&gt; that seems to be a collection of &lt;code&gt;gem_test.o&lt;/code&gt;-s. Again, by walking down into each of their subtrees, another use case of &lt;code&gt;mrbc&lt;/code&gt; can be found.&lt;/p&gt;
+
+&lt;h3 id="about-data-extraction-and-visualization"&gt;About Data Extraction and Visualization&lt;/h3&gt;
+
+&lt;h4 id="ruby"&gt;Ruby&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href="https://gist.github.com/shinaisan/c3a359334c2f8ae137d4"&gt;This script (Gist)&lt;/a&gt; extracts the task dependencies of mruby.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The script tries collecting all the tasks defined in the Rakefile. My first bet was that &lt;code&gt;MiniRake::Task.tasks&lt;/code&gt; would do the trick but actually it does not. I had to recursively traverse the dependency tree with the help of the &lt;code&gt;prerequisites&lt;/code&gt; parameter of a task. The method &lt;code&gt;Jstree::TaskInfo.all&lt;/code&gt; is written to this end and is called from the constructor of &lt;code&gt;Jstree::Graph&lt;/code&gt; that is the main class of the above script.&lt;/li&gt;
+  &lt;li&gt;An instance of &lt;code&gt;Jstree::Graph&lt;/code&gt; has nodes each of which represents one of the tasks in the Rakefile but does not have edges. The instance method &lt;code&gt;construct&lt;/code&gt; gives edges to the dependency graph instance.&lt;/li&gt;
+  &lt;li&gt;The instance method &lt;code&gt;to_json&lt;/code&gt; is called after the graph construction. Its first parameter takes the root task name. Its second parameter &lt;code&gt;roots&lt;/code&gt; takes names of tasks that are treated as leaf nodes that stop recursive call to the method. The &lt;code&gt;roots&lt;/code&gt; parameter is intended to serve as a list of root task names each of which is passed to the method as its first argument.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id="javascript"&gt;JavaScript&lt;/h4&gt;
+
+&lt;p&gt;The above Ruby script &lt;code&gt;jstree.rb&lt;/code&gt; produces a JSON file &lt;code&gt;jstree.json&lt;/code&gt;. This JSON file contains the definition of a variable &lt;code&gt;json&lt;/code&gt; (&lt;code&gt;var json = [ ... ];&lt;/code&gt;) that can be directly supplied to the jsTree library like below:&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;    &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"#tree-view-area"&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;jstree&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+        &lt;span class="s2"&gt;"core"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="s2"&gt;"data"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;json&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here is the excerpt of the JSON file. In the following JSON data, only the &lt;code&gt;text&lt;/code&gt; and &lt;code&gt;children&lt;/code&gt; parameters matter to jsTree. The &lt;code&gt;info&lt;/code&gt; parameter is something like an extra user parameter.
+The &lt;code&gt;jstree&lt;/code&gt; function does not care about it and seems to drop such extra parameters from the object returned by the &lt;a href="https://www.jstree.com/api/#/?f=get_node"&gt;&lt;code&gt;get_node&lt;/code&gt; API&lt;/a&gt;.
+Luckily however, it holds the original JSON data in the &lt;code&gt;original&lt;/code&gt; parameter. So my own &lt;code&gt;info&lt;/code&gt; parameter can be accessed in such a way as to say &lt;code&gt;data.instance.get_node(data.selected[0]).original.info&lt;/code&gt; in jsTree event handlers.
+There is also another extra parameter &lt;code&gt;jump&lt;/code&gt; in the output (not in the excerpt below) that is used to implement jumping from node to node.&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;json&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="c1"&gt;// snip&lt;/span&gt;
+      &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="s2"&gt;"text"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"build/host/src/array.o"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s2"&gt;"info"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="s2"&gt;"defining_actions"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"tasks/mruby_build_commands.rake:104"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+        &lt;span class="s2"&gt;"children"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+          &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="s2"&gt;"text"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"src/array.c"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="s2"&gt;"info"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="s2"&gt;"defining_actions"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+            &lt;span class="s2"&gt;"children"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+          &lt;span class="p"&gt;},&lt;/span&gt;
+          &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="s2"&gt;"text"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"build_config.rb"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="s2"&gt;"info"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="s2"&gt;"defining_actions"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+            &lt;span class="s2"&gt;"children"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+          &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="p"&gt;]&lt;/span&gt;
+      &lt;span class="p"&gt;},&lt;/span&gt;
+    &lt;span class="c1"&gt;// snip&lt;/span&gt;
+&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="references"&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://github.com/mruby/mruby"&gt;mruby/mruby - GitHub&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.jstree.com/"&gt;jsTree&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  <entry>
+    <title>Inspecting the Retransmission Behavior of the Mosquitto MQTT Broker with GDB</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/10/06/inspecting-the-retransmission-behavior-of-the-mosquitto-mqtt-broker-with-gdb.html"/>
+    <id>http://shinaisan.github.io/2015/10/06/inspecting-the-retransmission-behavior-of-the-mosquitto-mqtt-broker-with-gdb.html</id>
+    <published>2015-10-06T13:06:00Z</published>
+    <updated>2017-04-21T07:46:05+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;I just wanted to actually see how the Mosquitto MQTT broker retransmit packets when a communication is interrupted and confirm the effect of the &lt;code&gt;retry_interval&lt;/code&gt; config variable. Steps are as follows.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="environment"&gt;Environment&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Linux 3.13.0-48-generic Ubuntu SMP 86_64 GNU/Linux&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="building-mosquitto"&gt;Building Mosquitto&lt;/h3&gt;
+
+&lt;h4 id="installing-required-packages"&gt;Installing Required Packages&lt;/h4&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;sudo apt-get install build-essential
+&lt;span class="gp"&gt;$ &lt;/span&gt;sudo apt-get install git
+&lt;span class="gp"&gt;$ &lt;/span&gt;sudo apt-get install gdb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id="configuring-and-building"&gt;Configuring and Building&lt;/h4&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; &lt;span class="nv"&gt;$DIR_TO_HOST_MOSQUITTO_CLONE&lt;/span&gt;
+&lt;span class="gp"&gt;$ &lt;/span&gt;mkdir mosquitto
+&lt;span class="gp"&gt;$ &lt;/span&gt;git clone http://git.eclipse.org/gitroot/mosquitto/org.eclipse.mosquitto.git mosquitto
+&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;mosquitto
+&lt;span class="c"&gt;# Read build requirements and steps.&lt;/span&gt;
+&lt;span class="gp"&gt;$ &lt;/span&gt;less compiling.txt
+&lt;span class="c"&gt;# Disable some features to reduce dependencies.&lt;/span&gt;
+&lt;span class="gp"&gt;$ &lt;/span&gt;cp -v config.mk config.mk.orig
+&lt;span class="gp"&gt;$ &lt;/span&gt;sed -e &lt;span class="s1"&gt;'s/^\(WITH_TLS:=\).*$/\1=no/'&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+    -e &lt;span class="s1"&gt;'s/^\(WITH_TLS_PSK:=\).*/\1=no/'&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+    -e &lt;span class="s1"&gt;'s/^\(WITH_SRV:=\).*/\1=no/'&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+    -e &lt;span class="s1"&gt;'s/^\(WITH_UUID:=\).*/\1=no/'&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+    config.mk.orig &amp;gt; config.mk
+&lt;span class="c"&gt;# Build.&lt;/span&gt;
+&lt;span class="gp"&gt;$ &lt;/span&gt;make
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="testing-mosquitto"&gt;Testing Mosquitto&lt;/h3&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;lib
+&lt;span class="gp"&gt;$ &lt;/span&gt;sudo ldconfig
+&lt;span class="c"&gt;# Launch the broker&lt;/span&gt;
+&lt;span class="gp"&gt;$ &lt;/span&gt;src/mosquitto -v &amp;amp;
+&lt;span class="c"&gt;# Sending PUBLISH message to the broker with topic being "topic" and QoS being 2.&lt;/span&gt;
+&lt;span class="c"&gt;#    -h hostname-to-connect&lt;/span&gt;
+&lt;span class="c"&gt;#    -q QoS-value&lt;/span&gt;
+&lt;span class="gp"&gt;$ &lt;/span&gt;client/mosquitto_pub -h localhost -t topic -m message -q 2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id="output"&gt;Output&lt;/h4&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;xxxxxxxxxx: New connection from 127.0.0.1 on port 1883.
+xxxxxxxxxx: New client connected from 127.0.0.1 as mosqpub/xxx (c1, k60).
+xxxxxxxxxx: Sending CONNACK to mosqpub/xxx (0, 0)
+xxxxxxxxxx: Received PUBLISH from mosqpub/xxx (d0, q2, r0, m1, 'topic', ... (7 bytes))
+xxxxxxxxxx: Sending PUBREC to mosqpub/xxx (Mid: 1)
+xxxxxxxxxx: Received PUBREL from mosqpub/xxx (Mid: 1)
+xxxxxxxxxx: Sending PUBCOMP to mosqpub/xxx (Mid: 1)
+xxxxxxxxxx: Received DISCONNECT from mosqpub/xxx
+xxxxxxxxxx: Client mosqpub/xxx disconnected.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="testing-retransmission-using-gdb"&gt;Testing Retransmission using GDB&lt;/h3&gt;
+
+&lt;p&gt;Assuming that the mosquitto broker is running background at port 1883 on localhost, we publish a retained message, launch a subscriber to receive that message and then interrupt the conversation with GDB to see the broker resend the same message.&lt;/p&gt;
+
+&lt;h4 id="publishing-a-retained-message"&gt;Publishing a Retained Message&lt;/h4&gt;
+
+&lt;p&gt;The following command publishes a message of topic "topic" with QoS 2 and makes the broker retain it for future subscribers.&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="c"&gt;# The -r option makes this message retained on the server.&lt;/span&gt;
+&lt;span class="gp"&gt;$ &lt;/span&gt;client/mosquitto_pub -h localhost -t topic -m message -q 2 -r
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id="launching-a-subscriber-in-gdb-session"&gt;Launching a Subscriber in GDB session&lt;/h4&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;gdb client/mosquitto_sub
+&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# Stop the process from responding to PUBREL messages.&lt;/span&gt;
+&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; b _mosquitto_handle_pubrel
+&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# Run the subscriber with debugging output enabled (-d) and client ID being "c1".&lt;/span&gt;
+&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; run -d -h localhost -t topic -q 2 -i c1
+Starting program: client/mosquitto_sub -d -h localhost -t topic -q 2 -i c1
+xxxxxxxxxx: New connection from 127.0.0.1 on port 1883.
+Client c1 sending CONNECT
+xxxxxxxxxx: New client connected from 127.0.0.1 as c1 &lt;span class="o"&gt;(&lt;/span&gt;c1, k60&lt;span class="o"&gt;)&lt;/span&gt;.
+xxxxxxxxxx: Sending CONNACK to c1 &lt;span class="o"&gt;(&lt;/span&gt;0, 0&lt;span class="o"&gt;)&lt;/span&gt;
+Client c1 received CONNACK
+Client c1 sending SUBSCRIBE &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1, Topic: topic, QoS: 2&lt;span class="o"&gt;)&lt;/span&gt;
+xxxxxxxxxx: Received SUBSCRIBE from c1
+xxxxxxxxxx:     topic &lt;span class="o"&gt;(&lt;/span&gt;QoS 2&lt;span class="o"&gt;)&lt;/span&gt;
+xxxxxxxxxx: c1 2 topic
+xxxxxxxxxx: Sending SUBACK to c1
+xxxxxxxxxx: Sending PUBLISH to c1 &lt;span class="o"&gt;(&lt;/span&gt;d0, q2, r1, m1, &lt;span class="s1"&gt;'topic'&lt;/span&gt;, ... &lt;span class="o"&gt;(&lt;/span&gt;7 bytes&lt;span class="o"&gt;))&lt;/span&gt;
+Client c1 received SUBACK
+Subscribed &lt;span class="o"&gt;(&lt;/span&gt;mid: 1&lt;span class="o"&gt;)&lt;/span&gt;: 2
+Client c1 received PUBLISH &lt;span class="o"&gt;(&lt;/span&gt;d0, q2, r1, m1, &lt;span class="s1"&gt;'topic'&lt;/span&gt;, ... &lt;span class="o"&gt;(&lt;/span&gt;7 bytes&lt;span class="o"&gt;))&lt;/span&gt;
+Client c1 sending PUBREC &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
+xxxxxxxxxx: Received PUBREC from c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
+xxxxxxxxxx: Sending PUBREL to c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
+
+Breakpoint 1, _mosquitto_handle_pubrel &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;db&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0x0, &lt;span class="nv"&gt;mosq&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0x6070c0&lt;span class="o"&gt;)&lt;/span&gt;
+    at read_handle_shared.c:119
+
+&lt;span class="c"&gt;# Wait for 20 seconds ... and the server retransmit the PUBREL message.&lt;/span&gt;
+xxxxxxxxxx: Sending PUBREL to c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# If we keep waiting here, the server retransmit the same message repeatedly.&lt;/span&gt;
+&lt;span class="c"&gt;# The retransmission interval can be set with `retry_interval` in a config file.&lt;/span&gt;
+xxxxxxxxxx: Sending PUBREL to c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
+xxxxxxxxxx: Sending PUBREL to c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
+
+&lt;span class="c"&gt;# Run the c (continue) command to make the process respond to the first PUBREL.&lt;/span&gt;
+&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; c
+
+&lt;span class="c"&gt;# The breakpoint seems to hit as many times as the server has retransmitted.&lt;/span&gt;
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id="changing-retryinterval"&gt;Changing retry_interval&lt;/h4&gt;
+
+&lt;p&gt;The config file can be supplied to the broker with the &lt;code&gt;-c&lt;/code&gt; option.&lt;/p&gt;
+
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="c"&gt;# Here we use the default config file in the workspace.&lt;/span&gt;
+&lt;span class="c"&gt;# Change the retry_interval variable.&lt;/span&gt;
+&lt;span class="gp"&gt;$ &lt;/span&gt;vim mosquitto.conf
+&lt;span class="c"&gt;# Launch the broker.&lt;/span&gt;
+&lt;span class="gp"&gt;$ &lt;/span&gt;src/mosquitto -v -c mosquitto.conf
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Example of read_until parameter of BinData::Array</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/08/05/example-of-read_until-parameter-of-bindata-array.html"/>
+    <id>http://shinaisan.github.io/2015/08/05/example-of-read_until-parameter-of-bindata-array.html</id>
+    <published>2015-08-05T07:05:00Z</published>
+    <updated>2017-04-21T07:46:05+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;BinData is a Ruby Gem that can be used to parse and write binary data in a declarative way. Unlike structs in C language, which can only define static binary structures where sizes of fields are fixed, BinData provides a way to define a variable sized array by supplying a dynamic &lt;code&gt;initial_length&lt;/code&gt; or &lt;code&gt;read_until&lt;/code&gt; parameter.
+Both the parameters are well described with examples in the BinData manual.&lt;/p&gt;
+
+&lt;p&gt;Here is an example of &lt;code&gt;read_until&lt;/code&gt; parameter that contains references to external parameters.
+This example is meant to show how the propagation of method resolution works.&lt;/p&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/a94f7ea20b35397986f8.js"&gt;&lt;/script&gt;
+
+&lt;h3 id="reference"&gt;Reference&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://github.com/dmendel/bindata"&gt;BinData - Parsing Binary Data in Ruby&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://github.com/dmendel/bindata/wiki/CompoundTypes#read_until"&gt;:read_until&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  <entry>
+    <title>Trying out git-submodule</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/08/02/trying-out-git-submodule.html"/>
+    <id>http://shinaisan.github.io/2015/08/02/trying-out-git-submodule.html</id>
+    <published>2015-08-02T07:51:00Z</published>
+    <updated>2017-04-21T07:46:05+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;T/O&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/85292c94d9c15a60abd4.js"&gt;&lt;/script&gt;
+
+</content>
+  </entry>
+  <entry>
+    <title>0-1 Knapsack Problem Sample Implementation</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/08/01/0-1-knapsack-problem-sample-implementation.html"/>
+    <id>http://shinaisan.github.io/2015/08/01/0-1-knapsack-problem-sample-implementation.html</id>
+    <published>2015-08-01T13:59:00Z</published>
+    <updated>2017-04-21T07:46:05+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="problem-statement"&gt;Problem Statement&lt;/h3&gt;
+
+&lt;p&gt;The 0-1 knapsack problem: find the maximum profit \(p\) below, by choosing items to put in the knapsack whose capacity is given by \(w\). There are \(n\) items and each item \(i,\ (1\leq i\leq n)\) has a weight \(w_i\) and a decision variable \(x_i\) that takes 1 if the item \(i\) is selected or 0 otherwise.&lt;/p&gt;
+
+&lt;div&gt;
+\[
+\begin{align*}
+&amp;amp; &amp;amp;&amp;amp; p = \max_{1\leq i\leq n}{p_i x_i} \\
+&amp;amp; \text{subject to} &amp;amp;&amp;amp;
+\sum_{i = 1}^n{w_i x_i} \leq w \\
+&amp;amp; &amp;amp;&amp;amp; x_i \in \left\{0, 1\right\}
+\end{align*}
+\]
+&lt;/div&gt;
+
+&lt;h3 id="sample-implementation"&gt;Sample Implementation&lt;/h3&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/142117ca2271d58db152.js"&gt;&lt;/script&gt;
+
+&lt;h3 id="input"&gt;Input&lt;/h3&gt;
+
+&lt;p&gt;The format of the problem input for the above code is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;[The capacity of the knapsack (w)]&lt;/code&gt; &lt;code&gt;[The number of items (n)]&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;For each item[k] (k = 1, 2, …, n) in turn:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code&gt;[Weight]&lt;/code&gt; &lt;code&gt;[Profit]&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="dynamic-programing"&gt;Dynamic Programing&lt;/h3&gt;
+
+&lt;p&gt;The code above implements psuedo-polynomial time algorithm using dynamic programming.
+Assuming that \(\mathrm{dp}_{{i - 1},\ {x}}\) holds the solution of the smaller problem with \(n = i - 1\) and \(w = x\), the solution for \(n = i\) and \(w = x\) can be given by the following formula.&lt;/p&gt;
+
+&lt;div&gt;
+\[
+ \mathrm{dp}_{i,\ x} =
+ \begin{cases}
+ \mathrm{dp}_{{i - 1},\ x} &amp;amp; \mbox{if } x \lt w_i
+ \\
+ \min\left\{ \mathrm{dp}_{{i - 1},_ x} ,\ \mathrm{dp}_{{i - 1},\ {x - w_i}} + p_i \right\}
+ &amp;amp; \mbox{if } x \geq w_i
+ \end{cases}
+\]
+&lt;/div&gt;
+
+&lt;p&gt;And obviously \(\mathrm{dp}_{0,\ x} = 0\).&lt;/p&gt;
+
+&lt;p&gt;The solution is \(\mathrm{dp}_{n,\ w}\).&lt;/p&gt;
+
+&lt;h3 id="backtracking"&gt;Backtracking&lt;/h3&gt;
+
+&lt;p&gt;The indices of chosen items in the optimal solution can be obtained by backtracking the above algorithm.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Initialize \(x \leftarrow w\).&lt;/li&gt;
+  &lt;li&gt;If \(\mathrm{dp}_ {n,\ x} \neq \mathrm{dp}_ {{n - 1},\ x}\), the item \(n\) was selected, so update 
+\(x \leftarrow x - w_n\). Leave \(x\) unchanged otherwise.&lt;/li&gt;
+  &lt;li&gt;If \(\mathrm{dp}_ {{n - 1}, x} \neq \mathrm{dp}_ {{n - 2}, x}\), the item \(n - 1\) was selected, so update \(x \leftarrow x - w_ {n - 1}\). Leave \(x\) unchanged otherwise.&lt;/li&gt;
+  &lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  <entry>
+    <title>Some Practice Examples of Range Minimum Query (RMQ)</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2015/07/31/some-practice-examples-of-range-minimum-query-rmq.html"/>
+    <id>http://shinaisan.github.io/2015/07/31/some-practice-examples-of-range-minimum-query-rmq.html</id>
+    <published>2015-07-31T12:34:00Z</published>
+    <updated>2017-04-21T07:46:05+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="range-minimum-query-rmq"&gt;Range Minimum Query (RMQ)&lt;/h3&gt;
+
+&lt;p&gt;RMQ can be used to query minimum/maximum value in a specified interval with time complexity of \(O(\log n)\).&lt;/p&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/ebad4d2b1aa62a0529ca.js"&gt;&lt;/script&gt;
+
+&lt;h3 id="templated-oo-version"&gt;Templated OO Version&lt;/h3&gt;
+
+&lt;p&gt;Here is another implementation sample of RMQ in a templated OO style.
+It may be better if it has the ability to change the &lt;code&gt;min&lt;/code&gt; function to &lt;code&gt;max&lt;/code&gt; or similar.
+However, I think that the plain old procedural style is satisfactory in most cases and this kind of generality is not necessary.&lt;/p&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/46b77f9650bda9fd7c4a.js"&gt;&lt;/script&gt;
+
+</content>
+  </entry>
+</feed>
