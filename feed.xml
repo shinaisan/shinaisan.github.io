@@ -5,10 +5,276 @@
   <id>http://shinaisan.github.io</id>
   <link href="http://shinaisan.github.io"/>
   <link href="http://shinaisan.github.io/feed.xml" rel="self"/>
-  <updated>2015-12-22T14:14:00Z</updated>
+  <updated>2017-05-06T00:30:00Z</updated>
   <author>
     <name>M. Shiina</name>
   </author>
+  <entry>
+    <title>Cytoscape.js-powered Interactive Graph Visualization of WordNet Synsets</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2017/05/06/cytoscape-js-powered-interactive-graph-visualization-of-wordnet-synsets.html"/>
+    <id>http://shinaisan.github.io/2017/05/06/cytoscape-js-powered-interactive-graph-visualization-of-wordnet-synsets.html</id>
+    <published>2017-05-06T00:30:00Z</published>
+    <updated>2017-05-07T20:59:07+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;Cytoscape.js is a JavaScript library for graph visualization that enables rendering network structures on a web browser.
+The official site contains some demonstrations that show its possibility.
+I was fascinated and started playing around with its easy-to-use API.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Also, I was interested in WordNet, which has nothing to do with Cytoscape.js, and wanted a tool for it. WordNet is a large lexical database that groups synonymous words into an unordered set called "synset" and contains relations among synsets.
+Out of curiosity, I wrote some queries to examine what is inside the Japanese WordNet database.
+Then, I tried visualizing the results with Cytoscape.js.
+Finally, I ended up building the following simple web app.&lt;/p&gt;
+
+&lt;h2 id="the-web-app"&gt;The Web App&lt;/h2&gt;
+
+&lt;p&gt;&lt;a target="_blank" href="https://wordnet-viewer.herokuapp.com/"&gt;WordNet Viewer&lt;/a&gt;
+(Heads up! This site is a little energy consuming. Do not visit when the battery is running low:)&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="WordNet Viewer" src="../../../images/img-2017-04-22/WNV_Hello_en.png" /&gt;&lt;/p&gt;
+
+&lt;h3 id="graph-rendering"&gt;Graph Rendering&lt;/h3&gt;
+
+&lt;p&gt;A graph is displayed at the center of the page.&lt;/p&gt;
+
+&lt;p&gt;Each vertex of the graph represents a synset and each edge represents relationship between two synsets. The node at the tip of an arrow is a synset of the hypernym (in most cases) of the synset at the origin.
+(Some arrows represent other relationships such as membership relation but the app does not make clear distinction among them.)&lt;/p&gt;
+
+&lt;p&gt;Nodes and edges can be moved around by dragging.
+And the viewport can be panned and zoomed by dragging the background and using mouse wheel.&lt;/p&gt;
+
+&lt;h3 id="entering-a-word"&gt;Entering a Word&lt;/h3&gt;
+
+&lt;p&gt;Typing a word in the text box at the topmost navbar and hitting Go button causes the app to look up the synset containing the word entered. If a synset is found, the app visualizes the network involves it.&lt;/p&gt;
+
+&lt;p&gt;The following example is a graph rendered for a word "programmer:"&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Programmer" src="../../../images/img-2017-04-22/WNV_Viz_Synset_Programmer_en.png" /&gt;&lt;/p&gt;
+
+&lt;h3 id="details-of-a-synset"&gt;Details of a synset&lt;/h3&gt;
+
+&lt;p&gt;Clicking a node causes the app to change the layout of the graph to show all the words in the synset of the clicked node.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Words" src="../../../images/img-2017-04-22/WNV_Viz_Words.png" /&gt;&lt;/p&gt;
+
+&lt;h3 id="search-buttons"&gt;Search Buttons&lt;/h3&gt;
+
+&lt;p&gt;Each word in a synset can be clicked to show a tooltip carrying some buttons. One of them navigates you to Google for instance.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="qtip" src="../../../images/img-2017-04-22/WNV_qtip.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;The cytoscape-qtip plugin is used to enable this.&lt;/p&gt;
+
+&lt;h2 id="implementation-details"&gt;Implementation Details&lt;/h2&gt;
+
+&lt;p&gt;The web app is made up of the tree parts below:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Synset look up in the WordNet SQLite database using &lt;code&gt;sequel&lt;/code&gt; Ruby Gem.&lt;/li&gt;
+  &lt;li&gt;Sinatra routes to invoke SQL queries.&lt;/li&gt;
+  &lt;li&gt;Frontend script using Cytoscape.js to visualize the graph returned from Sinatra server.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="cytoscapejs"&gt;Cytoscape.js&lt;/h3&gt;
+
+&lt;p&gt;The advantage of using &lt;a href="http://js.cytoscape.org/"&gt;Cytoscape.js&lt;/a&gt; is not only rendering of graphs
+but also builtin support for standard gestures to pan and zoom the viewport and many many others.
+Once we have graph data in a format taylored to Cytoscape.js, we are ready to enjoy the features provided by the library.&lt;/p&gt;
+
+&lt;p&gt;Below are very short excerpts (modified and simplified) from the code in the app.&lt;/p&gt;
+
+&lt;h4 id="initialization"&gt;Initialization&lt;/h4&gt;
+
+&lt;p&gt;A sample code snippet for initializing visualization of a given &lt;code&gt;graph&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;cy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;cytoscape&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt; &lt;span class="c1"&gt;// Initialization of Cytoscape core object.&lt;/span&gt;
+  &lt;span class="na"&gt;container&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getElementById&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'cy'&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="c1"&gt;// A DOM element to contain a graph rendering.&lt;/span&gt;
+  &lt;span class="na"&gt;elements&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;graph&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// A graph data in JSON.&lt;/span&gt;
+  &lt;span class="na"&gt;style&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="na"&gt;selector&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'node'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="na"&gt;style&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="na"&gt;label&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'data(label)'&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h5 id="selector"&gt;Selector&lt;/h5&gt;
+
+&lt;p&gt;A CSS-like selector for &lt;code&gt;selector&lt;/code&gt; specifies elements in a given graph.
+Some examples of selector:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;selector&lt;/th&gt;
+      &lt;th&gt;objects selected&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;node&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;All nodes.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;edge&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;All edges.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;#foo&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;A graph element &lt;code&gt;ele&lt;/code&gt; where &lt;code&gt;ele.data.id&lt;/code&gt; is &lt;code&gt;"foo"&lt;/code&gt;.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;.foo&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;A graph element classed &lt;code&gt;foo&lt;/code&gt;.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;[some_parameter = "some value"]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Graph elements &lt;code&gt;ele&lt;/code&gt; where &lt;code&gt;ele.data.some_parameter&lt;/code&gt; is &lt;code&gt;"some value"&lt;/code&gt;.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;[?some_parameter]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Graph elements &lt;code&gt;ele&lt;/code&gt; where &lt;code&gt;ele.data.some_parameter&lt;/code&gt; is a truthy value.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;:visible&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Visible graph elements.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h5 id="labels"&gt;Labels&lt;/h5&gt;
+
+&lt;p&gt;In the above example, &lt;code&gt;data(label)&lt;/code&gt; is specified to show &lt;code&gt;ele.data.label&lt;/code&gt; as a label for an element &lt;code&gt;ele&lt;/code&gt; selected by the &lt;code&gt;selector&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id="graph-data"&gt;Graph Data&lt;/h4&gt;
+
+&lt;p&gt;A sample graph data consisting of two vertices and an edge connecting them
+(from &lt;code&gt;source&lt;/code&gt; to &lt;code&gt;target&lt;/code&gt;):&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nl"&gt;elements&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="c1"&gt;// Two vertices&lt;/span&gt;
+    &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="na"&gt;group&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"nodes"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="na"&gt;data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"node1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;label&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"label for node1"&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+    &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="na"&gt;group&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"nodes"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="na"&gt;data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"node2"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;label&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"label for node2"&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+    &lt;span class="c1"&gt;// An edge from "node1" to "node2"&lt;/span&gt;
+    &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="na"&gt;group&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"edges"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="na"&gt;data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"node1-to-node2"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;source&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"node1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;target&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"node2"&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id="analysis"&gt;Analysis&lt;/h4&gt;
+
+&lt;p&gt;An example use of &lt;code&gt;dijkstra&lt;/code&gt; where the distance from the node with truthy &lt;code&gt;data.start&lt;/code&gt; to the given node &lt;code&gt;n&lt;/code&gt; is calculated:&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;dijkstra&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;cy&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;elements&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="nx"&gt;dijkstra&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'[?start]'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;dist&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;dijkstra&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;distanceTo&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;n&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id="style-and-layout"&gt;Style and Layout&lt;/h4&gt;
+
+&lt;p&gt;A style sample where a mapper &lt;code&gt;mapData&lt;/code&gt; is used to linearly change the width of a node according to its &lt;code&gt;data.weight&lt;/code&gt; value:&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;      &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nl"&gt;selector&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'node'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="nx"&gt;style&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="s1"&gt;'shape'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'circle'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="s1"&gt;'width'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'mapData(weight, 0, 10, 20, 60)'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="s1"&gt;'label'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'data(label)'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="cm"&gt;/* ... */&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;An example use of the concentric layout to position nodes so that they are centered around some node:&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;  &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nl"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'concentric'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nx"&gt;concentric&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;dijkstra&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;distanceTo&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;n&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;cy&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;nodes&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="nx"&gt;d&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+    &lt;span class="nx"&gt;levelWidth&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;nodes&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;}&lt;/span&gt;
+  &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The positions of nodes are determined by the &lt;code&gt;concentric&lt;/code&gt; function. The higher the return value of the function applied to a node, the nearer the center it is placed.&lt;/p&gt;
+
+&lt;h3 id="querying-wordnet-database-with-ruby"&gt;Querying WordNet Database with Ruby&lt;/h3&gt;
+
+&lt;p&gt;The graph data is constructed by firstly querying SQLite 3 database of
+&lt;a href="http://compling.hss.ntu.edu.sg/wnja/"&gt;Japanese WordNet&lt;/a&gt;
+and secondly formatting the retrieved results for Cytoscape.js.&lt;/p&gt;
+
+&lt;h4 id="sequel"&gt;Sequel&lt;/h4&gt;
+
+&lt;p&gt;There is a Ruby Gem &lt;code&gt;wordnet&lt;/code&gt; but we cannot use it for Japanese WordNet
+because its schema seems to be different from English WordNet.&lt;/p&gt;
+
+&lt;p&gt;Anyway, we can query the database directly.
+The &lt;code&gt;sequel&lt;/code&gt; gem is quite handy for such tasks because
+we can construct SQL queries by chaining methods as is often done in Ruby.&lt;/p&gt;
+
+&lt;p&gt;A sample code for assigning a new Sequel instance to an instance variable &lt;code&gt;@db&lt;/code&gt; of some (arbitrary) class based on the SQLite 3 database file &lt;code&gt;./wnjpn.sqlite3&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'sequel'&lt;/span&gt;
+&lt;span class="c1"&gt;# ...&lt;/span&gt;
+  &lt;span class="vi"&gt;@db&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;Sequel&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;sqlite&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'./wnjpn.sqlite3'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id="synset-look-up-from-word"&gt;Synset Look Up from Word&lt;/h4&gt;
+
+&lt;p&gt;To look up synsets from a given word lemma &lt;code&gt;lemma&lt;/code&gt;,
+we specify the &lt;code&gt;word&lt;/code&gt; table (&lt;code&gt;@db[:word]&lt;/code&gt;), join the &lt;code&gt;sense&lt;/code&gt; table,
+and select columns of interest.&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_word_synsets&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;lemma&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="vi"&gt;@db&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:word&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="nf"&gt;where&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:lemma&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;lemma&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;senses&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;words&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:sense&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:wordid&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="ss"&gt;:wordid&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;senses&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:synset&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;Sequel&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;qualify&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:word&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:lang&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="no"&gt;Sequel&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;qualify&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:word&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:lemma&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;Sequel.qualify(:word, :lemma)&lt;/code&gt; can be written also as &lt;code&gt;Sequel[:word][:lemma]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The corresponding SQL query is as follows:&lt;/p&gt;
+
+&lt;pre class="highlight sql"&gt;&lt;code&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="nv"&gt;"synset"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nv"&gt;"word"&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nv"&gt;"lang"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nv"&gt;"word"&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nv"&gt;"lemma"&lt;/span&gt; &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="nv"&gt;"word"&lt;/span&gt;
+  &lt;span class="k"&gt;INNER&lt;/span&gt; &lt;span class="k"&gt;JOIN&lt;/span&gt; &lt;span class="nv"&gt;"sense"&lt;/span&gt; &lt;span class="k"&gt;ON&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;"sense"&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nv"&gt;"wordid"&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;"word"&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nv"&gt;"wordid"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="k"&gt;WHERE&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;"lemma"&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lemma&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="finding-hypernyms"&gt;Finding Hypernyms&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code&gt;synlink&lt;/code&gt; table (&lt;code&gt;@db[:synlink]&lt;/code&gt;) has pairs of &lt;code&gt;(synset1, synset2)&lt;/code&gt; each of which has a type &lt;code&gt;link&lt;/code&gt;. We want pairs of &lt;code&gt;link&lt;/code&gt; type &lt;code&gt;hype&lt;/code&gt;. Straightforward in Sequel:&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;synset_to_hypernyms&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;synset&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="vi"&gt;@db&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:synlink&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="nf"&gt;where&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:synset1&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;synset&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nf"&gt;where&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;link: &lt;/span&gt;&lt;span class="s1"&gt;'hype'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+      &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:synset1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:synset2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The corresponding SQL query is as follows:&lt;/p&gt;
+
+&lt;pre class="highlight sql"&gt;&lt;code&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="nv"&gt;"synset1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nv"&gt;"synset2"&lt;/span&gt; &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="nv"&gt;"synlink"&lt;/span&gt; &lt;span class="k"&gt;WHERE&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="nv"&gt;"synset1"&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;synset&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;AND&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;"link"&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;"hype"&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="references"&gt;References&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="http://js.cytoscape.org/"&gt;Cytoscape.js&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Franz M, Lopes CT, Huck G, Dong Y, Sumer O, Bader GD&lt;br /&gt;
+Cytoscape.js: a graph theory library for visualisation and analysis&lt;br /&gt;
+&lt;a href="http://bioinformatics.oxfordjournals.org/content/32/2/309"&gt;Bioinformatics (2016) 32 (2): 309-311 first published online September 28, 2015 doi:10.1093/bioinformatics/btv557&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://github.com/jeremyevans/sequel"&gt;jeremyevans/sequel: Sequel: The Database Toolkit for Ruby&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
   <entry>
     <title>Browsing Task Dependencies in the Rakefile of mruby using jsTree</title>
     <link rel="alternate" href="http://shinaisan.github.io/2015/12/22/browsing-task-dependencies-in-the-rakefile-of-mruby-using-jstree.html"/>
@@ -370,33 +636,6 @@ Assuming that \(\mathrm{dp}_{{i - 1},\ {x}}\) holds the solution of the smaller 
   &lt;li&gt;If \(\mathrm{dp}_ {{n - 1}, x} \neq \mathrm{dp}_ {{n - 2}, x}\), the item \(n - 1\) was selected, so update \(x \leftarrow x - w_ {n - 1}\). Leave \(x\) unchanged otherwise.&lt;/li&gt;
   &lt;li&gt;…&lt;/li&gt;
 &lt;/ul&gt;
-
-</content>
-  </entry>
-  <entry>
-    <title>Some Practice Examples of Range Minimum Query (RMQ)</title>
-    <link rel="alternate" href="http://shinaisan.github.io/2015/07/31/some-practice-examples-of-range-minimum-query-rmq.html"/>
-    <id>http://shinaisan.github.io/2015/07/31/some-practice-examples-of-range-minimum-query-rmq.html</id>
-    <published>2015-07-31T12:34:00Z</published>
-    <updated>2017-04-21T07:46:05+09:00</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;/p&gt;
-
-&lt;h3 id="range-minimum-query-rmq"&gt;Range Minimum Query (RMQ)&lt;/h3&gt;
-
-&lt;p&gt;RMQ can be used to query minimum/maximum value in a specified interval with time complexity of \(O(\log n)\).&lt;/p&gt;
-
-&lt;script src="https://gist.github.com/shinaisan/ebad4d2b1aa62a0529ca.js"&gt;&lt;/script&gt;
-
-&lt;h3 id="templated-oo-version"&gt;Templated OO Version&lt;/h3&gt;
-
-&lt;p&gt;Here is another implementation sample of RMQ in a templated OO style.
-It may be better if it has the ability to change the &lt;code&gt;min&lt;/code&gt; function to &lt;code&gt;max&lt;/code&gt; or similar.
-However, I think that the plain old procedural style is satisfactory in most cases and this kind of generality is not necessary.&lt;/p&gt;
-
-&lt;script src="https://gist.github.com/shinaisan/46b77f9650bda9fd7c4a.js"&gt;&lt;/script&gt;
 
 </content>
   </entry>

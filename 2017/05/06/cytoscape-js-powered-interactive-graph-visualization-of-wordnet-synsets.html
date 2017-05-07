@@ -1,0 +1,441 @@
+<!doctype html> 
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="IE=edge;chrome=1" http-equiv="X-UA-Compatible" />
+    <title>My gh-pages | Cytoscape.js-powered Interactive Graph Visualization of WordNet Synsets</title>
+    <meta content="<p>Cytoscape.js is a JavaScript library for graph visualization that enables rendering network structures on a web browser.
+The official site contains some demonstrations that show its possibility.
+I was fascinated and started playing around with its easy-to-use API.</p>
+
+<p>" name="description" />
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" /><!--[if lt IE 9]><script src="../../../js/ie8.js" type="text/javascript"></script><![endif]--><link href="../../../css/all.css" media="screen" rel="stylesheet" type="text/css" /><script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="/">My gh-pages</a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="https://github.com/shinaisan"> About</a>
+            </li>
+            <li>
+              <a href="https://github.com/shinaisan"><i class="fa fa-github-square fa-lg fa-inverse"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-3">
+          <div class="well">
+            <h4>
+              Tags
+            </h4>
+            <ul class="list-unstyled">
+              <li>
+                <a href="/tags/git.html">Git</a> (1)
+              </li>
+              <li>
+                <a href="/tags/snippet.html">Snippet</a> (5)
+              </li>
+              <li>
+                <a href="/tags/gdb.html">GDB</a> (1)
+              </li>
+              <li>
+                <a href="/tags/debugging.html">Debugging</a> (1)
+              </li>
+              <li>
+                <a href="/tags/mqtt.html">MQTT</a> (1)
+              </li>
+              <li>
+                <a href="/tags/mosquitto.html">Mosquitto</a> (1)
+              </li>
+              <li>
+                <a href="/tags/network.html">Network</a> (1)
+              </li>
+              <li>
+                <a href="/tags/protocol.html">Protocol</a> (1)
+              </li>
+              <li>
+                <a href="/tags/python.html">Python</a> (1)
+              </li>
+              <li>
+                <a href="/tags/ruby.html">Ruby</a> (4)
+              </li>
+              <li>
+                <a href="/tags/mruby.html">mruby</a> (1)
+              </li>
+              <li>
+                <a href="/tags/javascript.html">JavaScript</a> (2)
+              </li>
+              <li>
+                <a href="/tags/graph.html">graph</a> (1)
+              </li>
+              <li>
+                <a href="/tags/visualization.html">visualization</a> (1)
+              </li>
+              <li>
+                <a href="/tags/nlp.html">NLP</a> (1)
+              </li>
+              <li>
+                <a href="/tags/wordnet.html">WordNet</a> (1)
+              </li>
+              <li>
+                <a href="/tags/c.html">C++</a> (2)
+              </li>
+              <li>
+                <a href="/tags/algorithm.html">Algorithm</a> (2)
+              </li>
+              <li>
+                <a href="/tags/aws.html">AWS</a> (1)
+              </li>
+              <li>
+                <a href="/tags/ubuntu.html">Ubuntu</a> (1)
+              </li>
+              <li>
+                <a href="/tags/rbenv.html">rbenv</a> (1)
+              </li>
+              <li>
+                <a href="/tags/middleman.html">Middleman</a> (1)
+              </li>
+              <li>
+                <a href="/tags/bindata.html">BinData</a> (1)
+              </li>
+            </ul>
+          </div>
+          <div class="well">
+            <h4>
+              By year
+            </h4>
+            <ol>
+              <li>
+                <a href="/2017.html">2017</a> (1)
+              </li>
+              <li>
+                <a href="/2015.html">2015</a> (9)
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="col-lg-9 col-md-9">
+          <h1>
+            Cytoscape.js-powered Interactive Graph Visualization of WordNet Synsets
+          </h1>
+          <small class="label label-default">JavaScript</small>
+          <small class="label label-default">graph</small>
+          <small class="label label-default">visualization</small>
+          <small class="label label-default">NLP</small>
+          <small class="label label-default">WordNet</small>
+          <hr />
+          <p>
+            <span class="glyphicon glyphicon-time"></span> Posted on May  6
+          </p>
+          <hr /><p>Cytoscape.js is a JavaScript library for graph visualization that enables rendering network structures on a web browser.
+The official site contains some demonstrations that show its possibility.
+I was fascinated and started playing around with its easy-to-use API.</p>
+
+<p></p>
+
+<p>Also, I was interested in WordNet, which has nothing to do with Cytoscape.js, and wanted a tool for it. WordNet is a large lexical database that groups synonymous words into an unordered set called "synset" and contains relations among synsets.
+Out of curiosity, I wrote some queries to examine what is inside the Japanese WordNet database.
+Then, I tried visualizing the results with Cytoscape.js.
+Finally, I ended up building the following simple web app.</p>
+
+<h2 id="the-web-app">The Web App</h2>
+
+<p><a target="_blank" href="https://wordnet-viewer.herokuapp.com/">WordNet Viewer</a>
+(Heads up! This site is a little energy consuming. Do not visit when the battery is running low:)</p>
+
+<p><img alt="WordNet Viewer" src="../../../images/img-2017-04-22/WNV_Hello_en.png" /></p>
+
+<h3 id="graph-rendering">Graph Rendering</h3>
+
+<p>A graph is displayed at the center of the page.</p>
+
+<p>Each vertex of the graph represents a synset and each edge represents relationship between two synsets. The node at the tip of an arrow is a synset of the hypernym (in most cases) of the synset at the origin.
+(Some arrows represent other relationships such as membership relation but the app does not make clear distinction among them.)</p>
+
+<p>Nodes and edges can be moved around by dragging.
+And the viewport can be panned and zoomed by dragging the background and using mouse wheel.</p>
+
+<h3 id="entering-a-word">Entering a Word</h3>
+
+<p>Typing a word in the text box at the topmost navbar and hitting Go button causes the app to look up the synset containing the word entered. If a synset is found, the app visualizes the network involves it.</p>
+
+<p>The following example is a graph rendered for a word "programmer:"</p>
+
+<p><img alt="Programmer" src="../../../images/img-2017-04-22/WNV_Viz_Synset_Programmer_en.png" /></p>
+
+<h3 id="details-of-a-synset">Details of a synset</h3>
+
+<p>Clicking a node causes the app to change the layout of the graph to show all the words in the synset of the clicked node.</p>
+
+<p><img alt="Words" src="../../../images/img-2017-04-22/WNV_Viz_Words.png" /></p>
+
+<h3 id="search-buttons">Search Buttons</h3>
+
+<p>Each word in a synset can be clicked to show a tooltip carrying some buttons. One of them navigates you to Google for instance.</p>
+
+<p><img alt="qtip" src="../../../images/img-2017-04-22/WNV_qtip.png" /></p>
+
+<p>The cytoscape-qtip plugin is used to enable this.</p>
+
+<h2 id="implementation-details">Implementation Details</h2>
+
+<p>The web app is made up of the tree parts below:</p>
+
+<ul>
+  <li>Synset look up in the WordNet SQLite database using <code>sequel</code> Ruby Gem.</li>
+  <li>Sinatra routes to invoke SQL queries.</li>
+  <li>Frontend script using Cytoscape.js to visualize the graph returned from Sinatra server.</li>
+</ul>
+
+<h3 id="cytoscapejs">Cytoscape.js</h3>
+
+<p>The advantage of using <a href="http://js.cytoscape.org/">Cytoscape.js</a> is not only rendering of graphs
+but also builtin support for standard gestures to pan and zoom the viewport and many many others.
+Once we have graph data in a format taylored to Cytoscape.js, we are ready to enjoy the features provided by the library.</p>
+
+<p>Below are very short excerpts (modified and simplified) from the code in the app.</p>
+
+<h4 id="initialization">Initialization</h4>
+
+<p>A sample code snippet for initializing visualization of a given <code>graph</code>:</p>
+
+<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">cy</span> <span class="o">=</span> <span class="nx">cytoscape</span><span class="p">({</span> <span class="c1">// Initialization of Cytoscape core object.</span>
+  <span class="na">container</span><span class="p">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'cy'</span><span class="p">),</span> <span class="c1">// A DOM element to contain a graph rendering.</span>
+  <span class="na">elements</span><span class="p">:</span> <span class="nx">graph</span><span class="p">,</span> <span class="c1">// A graph data in JSON.</span>
+  <span class="na">style</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="na">selector</span><span class="p">:</span> <span class="s1">'node'</span><span class="p">,</span>
+      <span class="na">style</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">label</span><span class="p">:</span> <span class="s1">'data(label)'</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">});</span>
+</code></pre>
+<h5 id="selector">Selector</h5>
+
+<p>A CSS-like selector for <code>selector</code> specifies elements in a given graph.
+Some examples of selector:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>selector</th>
+      <th>objects selected</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>node</code></td>
+      <td>All nodes.</td>
+    </tr>
+    <tr>
+      <td><code>edge</code></td>
+      <td>All edges.</td>
+    </tr>
+    <tr>
+      <td><code>#foo</code></td>
+      <td>A graph element <code>ele</code> where <code>ele.data.id</code> is <code>"foo"</code>.</td>
+    </tr>
+    <tr>
+      <td><code>.foo</code></td>
+      <td>A graph element classed <code>foo</code>.</td>
+    </tr>
+    <tr>
+      <td><code>[some_parameter = "some value"]</code></td>
+      <td>Graph elements <code>ele</code> where <code>ele.data.some_parameter</code> is <code>"some value"</code>.</td>
+    </tr>
+    <tr>
+      <td><code>[?some_parameter]</code></td>
+      <td>Graph elements <code>ele</code> where <code>ele.data.some_parameter</code> is a truthy value.</td>
+    </tr>
+    <tr>
+      <td><code>:visible</code></td>
+      <td>Visible graph elements.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="labels">Labels</h5>
+
+<p>In the above example, <code>data(label)</code> is specified to show <code>ele.data.label</code> as a label for an element <code>ele</code> selected by the <code>selector</code>.</p>
+
+<h4 id="graph-data">Graph Data</h4>
+
+<p>A sample graph data consisting of two vertices and an edge connecting them
+(from <code>source</code> to <code>target</code>):</p>
+
+<pre class="highlight javascript"><code><span class="p">{</span>
+  <span class="nl">elements</span><span class="p">:</span> <span class="p">[</span>
+    <span class="c1">// Two vertices</span>
+    <span class="p">{</span>
+      <span class="na">group</span><span class="p">:</span> <span class="s2">"nodes"</span><span class="p">,</span>
+      <span class="na">data</span><span class="p">:</span> <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="s2">"node1"</span><span class="p">,</span> <span class="na">label</span><span class="p">:</span> <span class="s2">"label for node1"</span><span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="na">group</span><span class="p">:</span> <span class="s2">"nodes"</span><span class="p">,</span>
+      <span class="na">data</span><span class="p">:</span> <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="s2">"node2"</span><span class="p">,</span> <span class="na">label</span><span class="p">:</span> <span class="s2">"label for node2"</span><span class="p">}</span>
+    <span class="p">},</span>
+    <span class="c1">// An edge from "node1" to "node2"</span>
+    <span class="p">{</span>
+      <span class="na">group</span><span class="p">:</span> <span class="s2">"edges"</span><span class="p">,</span>
+      <span class="na">data</span><span class="p">:</span> <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="s2">"node1-to-node2"</span><span class="p">,</span> <span class="na">source</span><span class="p">:</span> <span class="s2">"node1"</span><span class="p">,</span> <span class="na">target</span><span class="p">:</span> <span class="s2">"node2"</span><span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+<h4 id="analysis">Analysis</h4>
+
+<p>An example use of <code>dijkstra</code> where the distance from the node with truthy <code>data.start</code> to the given node <code>n</code> is calculated:</p>
+
+<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">dijkstra</span> <span class="o">=</span> <span class="nx">cy</span><span class="p">.</span><span class="nx">elements</span><span class="p">().</span><span class="nx">dijkstra</span><span class="p">(</span><span class="s1">'[?start]'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="mi">1</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">dist</span> <span class="o">=</span> <span class="nx">dijkstra</span><span class="p">.</span><span class="nx">distanceTo</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+</code></pre>
+<h4 id="style-and-layout">Style and Layout</h4>
+
+<p>A style sample where a mapper <code>mapData</code> is used to linearly change the width of a node according to its <code>data.weight</code> value:</p>
+
+<pre class="highlight javascript"><code>      <span class="p">{</span>
+        <span class="nl">selector</span><span class="p">:</span> <span class="s1">'node'</span><span class="p">,</span>
+        <span class="nx">style</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s1">'shape'</span><span class="p">:</span> <span class="s1">'circle'</span><span class="p">,</span>
+          <span class="s1">'width'</span><span class="p">:</span> <span class="s1">'mapData(weight, 0, 10, 20, 60)'</span><span class="p">,</span>
+          <span class="s1">'label'</span><span class="p">:</span> <span class="s1">'data(label)'</span><span class="p">,</span>
+          <span class="cm">/* ... */</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+</code></pre>
+<p>An example use of the concentric layout to position nodes so that they are centered around some node:</p>
+
+<pre class="highlight javascript"><code>  <span class="p">{</span>
+    <span class="nl">name</span><span class="p">:</span> <span class="s1">'concentric'</span><span class="p">,</span>
+    <span class="nx">concentric</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">dijkstra</span><span class="p">.</span><span class="nx">distanceTo</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+      <span class="k">return</span> <span class="nx">cy</span><span class="p">.</span><span class="nx">nodes</span><span class="p">().</span><span class="nx">length</span> <span class="o">-</span> <span class="nx">d</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">levelWidth</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="mi">1</span><span class="p">;}</span>
+  <span class="p">};</span>
+</code></pre>
+<p>The positions of nodes are determined by the <code>concentric</code> function. The higher the return value of the function applied to a node, the nearer the center it is placed.</p>
+
+<h3 id="querying-wordnet-database-with-ruby">Querying WordNet Database with Ruby</h3>
+
+<p>The graph data is constructed by firstly querying SQLite 3 database of
+<a href="http://compling.hss.ntu.edu.sg/wnja/">Japanese WordNet</a>
+and secondly formatting the retrieved results for Cytoscape.js.</p>
+
+<h4 id="sequel">Sequel</h4>
+
+<p>There is a Ruby Gem <code>wordnet</code> but we cannot use it for Japanese WordNet
+because its schema seems to be different from English WordNet.</p>
+
+<p>Anyway, we can query the database directly.
+The <code>sequel</code> gem is quite handy for such tasks because
+we can construct SQL queries by chaining methods as is often done in Ruby.</p>
+
+<p>A sample code for assigning a new Sequel instance to an instance variable <code>@db</code> of some (arbitrary) class based on the SQLite 3 database file <code>./wnjpn.sqlite3</code>:</p>
+
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'sequel'</span>
+<span class="c1"># ...</span>
+  <span class="vi">@db</span> <span class="o">=</span> <span class="no">Sequel</span><span class="p">.</span><span class="nf">sqlite</span><span class="p">(</span><span class="s1">'./wnjpn.sqlite3'</span><span class="p">)</span>
+</code></pre>
+<h4 id="synset-look-up-from-word">Synset Look Up from Word</h4>
+
+<p>To look up synsets from a given word lemma <code>lemma</code>,
+we specify the <code>word</code> table (<code>@db[:word]</code>), join the <code>sense</code> table,
+and select columns of interest.</p>
+
+<pre class="highlight ruby"><code>  <span class="k">def</span> <span class="nf">get_word_synsets</span><span class="p">(</span><span class="n">lemma</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="vi">@db</span><span class="p">[</span><span class="ss">:word</span><span class="p">].</span><span class="nf">where</span><span class="p">(</span><span class="ss">:lemma</span> <span class="o">=&gt;</span> <span class="n">lemma</span><span class="p">)</span>
+    <span class="n">senses</span> <span class="o">=</span> <span class="n">words</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="ss">:sense</span><span class="p">,</span> <span class="ss">:wordid</span> <span class="o">=&gt;</span> <span class="ss">:wordid</span><span class="p">)</span>
+    <span class="n">senses</span><span class="p">.</span><span class="nf">select</span><span class="p">(</span><span class="ss">:synset</span><span class="p">,</span> <span class="no">Sequel</span><span class="p">.</span><span class="nf">qualify</span><span class="p">(</span><span class="ss">:word</span><span class="p">,</span> <span class="ss">:lang</span><span class="p">),</span> <span class="no">Sequel</span><span class="p">.</span><span class="nf">qualify</span><span class="p">(</span><span class="ss">:word</span><span class="p">,</span> <span class="ss">:lemma</span><span class="p">))</span>
+  <span class="k">end</span>
+</code></pre>
+<p><code>Sequel.qualify(:word, :lemma)</code> can be written also as <code>Sequel[:word][:lemma]</code>.</p>
+
+<p>The corresponding SQL query is as follows:</p>
+
+<pre class="highlight sql"><code><span class="k">SELECT</span> <span class="nv">"synset"</span><span class="p">,</span> <span class="nv">"word"</span><span class="p">.</span><span class="nv">"lang"</span><span class="p">,</span> <span class="nv">"word"</span><span class="p">.</span><span class="nv">"lemma"</span> <span class="k">FROM</span> <span class="nv">"word"</span>
+  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="nv">"sense"</span> <span class="k">ON</span> <span class="p">(</span><span class="nv">"sense"</span><span class="p">.</span><span class="nv">"wordid"</span> <span class="o">=</span> <span class="nv">"word"</span><span class="p">.</span><span class="nv">"wordid"</span><span class="p">)</span>
+  <span class="k">WHERE</span> <span class="p">(</span><span class="nv">"lemma"</span> <span class="o">=</span> <span class="n">lemma</span><span class="p">)</span>
+</code></pre>
+<h3 id="finding-hypernyms">Finding Hypernyms</h3>
+
+<p>The <code>synlink</code> table (<code>@db[:synlink]</code>) has pairs of <code>(synset1, synset2)</code> each of which has a type <code>link</code>. We want pairs of <code>link</code> type <code>hype</code>. Straightforward in Sequel:</p>
+
+<pre class="highlight ruby"><code>  <span class="k">def</span> <span class="nf">synset_to_hypernyms</span><span class="p">(</span><span class="n">synset</span><span class="p">)</span>
+    <span class="vi">@db</span><span class="p">[</span><span class="ss">:synlink</span><span class="p">].</span><span class="nf">where</span><span class="p">(</span><span class="ss">:synset1</span> <span class="o">=&gt;</span> <span class="n">synset</span><span class="p">).</span><span class="nf">where</span><span class="p">(</span><span class="ss">link: </span><span class="s1">'hype'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">select</span><span class="p">(</span><span class="ss">:synset1</span><span class="p">,</span> <span class="ss">:synset2</span><span class="p">)</span>
+  <span class="k">end</span>
+</code></pre>
+<p>The corresponding SQL query is as follows:</p>
+
+<pre class="highlight sql"><code><span class="k">SELECT</span> <span class="nv">"synset1"</span><span class="p">,</span> <span class="nv">"synset2"</span> <span class="k">FROM</span> <span class="nv">"synlink"</span> <span class="k">WHERE</span> <span class="p">((</span><span class="nv">"synset1"</span> <span class="o">=</span> <span class="n">synset</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="nv">"link"</span> <span class="o">=</span> <span class="nv">"hype"</span><span class="p">))</span>
+</code></pre>
+<h2 id="references">References</h2>
+
+<ul>
+  <li><a href="http://js.cytoscape.org/">Cytoscape.js</a></li>
+  <li>Franz M, Lopes CT, Huck G, Dong Y, Sumer O, Bader GD<br />
+Cytoscape.js: a graph theory library for visualisation and analysis<br />
+<a href="http://bioinformatics.oxfordjournals.org/content/32/2/309">Bioinformatics (2016) 32 (2): 309-311 first published online September 28, 2015 doi:10.1093/bioinformatics/btv557</a></li>
+  <li><a href="https://github.com/jeremyevans/sequel">jeremyevans/sequel: Sequel: The Database Toolkit for Ruby</a></li>
+</ul>
+
+
+          <aside>
+            <h3>
+              Recent Articles
+            </h3>
+            <ol>
+              <li>
+                <a href="/2017/05/06/cytoscape-js-powered-interactive-graph-visualization-of-wordnet-synsets.html">Cytoscape.js-powered Interactive Graph Visualization of WordNet Synsets</a> <span>May  6</span> 
+              </li>
+              <li>
+                <a href="/2015/12/22/browsing-task-dependencies-in-the-rakefile-of-mruby-using-jstree.html">Browsing Task Dependencies in the Rakefile of mruby using jsTree</a> <span>Dec 22</span> 
+              </li>
+              <li>
+                <a href="/2015/10/06/inspecting-the-retransmission-behavior-of-the-mosquitto-mqtt-broker-with-gdb.html">Inspecting the Retransmission Behavior of the Mosquitto MQTT Broker with GDB</a> <span>Oct  6</span> 
+              </li>
+              <li>
+                <a href="/2015/08/05/example-of-read_until-parameter-of-bindata-array.html">Example of read_until parameter of BinData::Array</a> <span>Aug  5</span> 
+              </li>
+              <li>
+                <a href="/2015/08/02/trying-out-git-submodule.html">Trying out git-submodule</a> <span>Aug  2</span> 
+              </li>
+              <li>
+                <a href="/2015/08/01/0-1-knapsack-problem-sample-implementation.html">0-1 Knapsack Problem Sample Implementation</a> <span>Aug  1</span> 
+              </li>
+              <li>
+                <a href="/2015/07/31/some-practice-examples-of-range-minimum-query-rmq.html">Some Practice Examples of Range Minimum Query (RMQ)</a> <span>Jul 31</span> 
+              </li>
+              <li>
+                <a href="/2015/07/11/setting-up-python-virtualenv-with-virtualenvwrapper-on-ubuntu-ec2.html">Setting up Python virtualenv with virtualenvwrapper on Ubuntu/EC2</a> <span>Jul 11</span> 
+              </li>
+              <li>
+                <a href="/2015/06/16/building-and-installing-ruby-with-rbenv-on-ubuntu-ec2.html">Building and Installing Ruby with rbenv on Ubuntu/EC2</a> <span>Jun 16</span> 
+              </li>
+              <li>
+                <a href="/2015/06/03/starting-a-blog-with-middleman.html">Starting a Blog with Middleman</a> <span>Jun  3</span> 
+              </li>
+            </ol>
+          </aside>
+          <hr>
+            <p class="text-center">
+              2015 <a href="/">My gh-pages</a>
+            </p>
+          </hr>
+        </div>
+      </div>
+    </div>
+    <script src="../../../js/all.js" type="text/javascript"></script>
+  </body>
+</html>
