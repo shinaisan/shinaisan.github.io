@@ -14,13 +14,13 @@
     <link rel="alternate" href="http://shinaisan.github.io/2017/05/06/cytoscape-js-powered-interactive-graph-visualization-of-wordnet-synsets.html"/>
     <id>http://shinaisan.github.io/2017/05/06/cytoscape-js-powered-interactive-graph-visualization-of-wordnet-synsets.html</id>
     <published>2017-05-06T00:30:00Z</published>
-    <updated>2017-05-07T21:28:23+09:00</updated>
+    <updated>2017-05-08T21:14:05+09:00</updated>
     <author>
       <name>Article Author</name>
     </author>
     <content type="html">&lt;p&gt;Cytoscape.js is a JavaScript library for graph visualization that enables rendering network structures on a web browser.
-The official site contains some demonstrations that show its possibility.
-I was fascinated and started playing around with its easy-to-use API.&lt;/p&gt;
+The official site has some demonstrations that show its capabilities.
+I was fascinated and started playing with its easy-to-use API.&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;
 
