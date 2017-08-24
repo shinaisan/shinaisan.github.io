@@ -5,10 +5,284 @@
   <id>http://shinaisan.github.io</id>
   <link href="http://shinaisan.github.io"/>
   <link href="http://shinaisan.github.io/feed.xml" rel="self"/>
-  <updated>2017-05-06T00:30:00Z</updated>
+  <updated>2017-08-13T09:26:00Z</updated>
   <author>
     <name>M. Shiina</name>
   </author>
+  <entry>
+    <title>Making a Simple Image Viewer using React and Express</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2017/08/13/making-a-simple-image-viewer-using-react-and-express.html"/>
+    <id>http://shinaisan.github.io/2017/08/13/making-a-simple-image-viewer-using-react-and-express.html</id>
+    <published>2017-08-13T09:26:00Z</published>
+    <updated>2017-08-24T22:48:20+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;A simple app written as my own hands-on exercise to get a quick grasp of React, Redux and react-router following some tutorial sites:&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id="the-repo"&gt;The Repo&lt;/h2&gt;
+
+&lt;p&gt;The sources can be retrieved from &lt;a href="https://github.com/shinaisan/wikipedia-thumbnail-gallery"&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id="the-app"&gt;The App&lt;/h2&gt;
+
+&lt;p&gt;The app has a navbar on top with a text box.
+Wikipedia articles can be retrieved by typing in a keyword.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Top navbar" src="../../../images/img-2017-08-13/WTV_TopNavbar.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Upon completion of search, matching Wikipedia articles are listed in the center of the page. Some of the articles come with a corresponding thumbnail image.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="List of Matching Articles" src="../../../images/img-2017-08-13/WTV_Sample.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;By clicking one of the thumbnails, a larger thumbnail is displayed in a modal window. This window can be closed by clicking anywhere on the page.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Modal Image View" src="../../../images/img-2017-08-13/WTV_Modal.png" /&gt;&lt;/p&gt;
+
+&lt;h2 id="the-architecture"&gt;The Architecture&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The client pushes the path &lt;code&gt;/search&lt;/code&gt; with a keyword parameter to the history stack.&lt;/li&gt;
+  &lt;li&gt;The client mounts the &lt;code&gt;Gallery&lt;/code&gt; component for rendering search results. Upon mounting of this component, it calls the server API asynchronously and dispatches the &lt;code&gt;START_SEARCHING_FOR_KEYWORD&lt;/code&gt; action.&lt;/li&gt;
+  &lt;li&gt;The server fetches Wikipedia article titles and thumbnail URLs via Mediawiki API.&lt;/li&gt;
+  &lt;li&gt;The client dispatches the &lt;code&gt;RECEIVED_THUMBNAILS&lt;/code&gt; action upon a successful response from the server.&lt;/li&gt;
+  &lt;li&gt;The client renders the search results.&lt;/li&gt;
+  &lt;li&gt;The client renders a modal window to view a larger thumbnail when the user clicks on a smaller thumbanil.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img alt="Architecture" src="../../../images/img-2017-08-13/WTV_Architecture.png" /&gt;&lt;/p&gt;
+
+&lt;h2 id="the-server"&gt;The Server&lt;/h2&gt;
+
+&lt;h3 id="defining-the-api"&gt;Defining the API&lt;/h3&gt;
+
+&lt;p&gt;The server uses Express.
+It has only one route &lt;code&gt;/api/search&lt;/code&gt; which is defined as below.&lt;/p&gt;
+
+&lt;pre class="highlight jsx"&gt;&lt;code&gt;&lt;span class="c1"&gt;// Excerpt from ./server/app.js&lt;/span&gt;
+&lt;span class="nx"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'/api/search'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;req&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;res&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;wikipedia&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;fetchTitlesAndThumbnails&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;req&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;query&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;kw&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;// Defined in ./server/wikipedia.js&lt;/span&gt;
+    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;then&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;json&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;result&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;})&lt;/span&gt;
+    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;catch&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;toString&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+      &lt;span class="nx"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;status&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;500&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;json&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="na"&gt;error&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;toString&lt;/span&gt;&lt;span class="p"&gt;()});&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="the-mediawiki-api"&gt;The Mediawiki API&lt;/h3&gt;
+
+&lt;p&gt;The server uses two Mediawiki APIs; &lt;code&gt;opensearch&lt;/code&gt; and &lt;code&gt;query(pageimages)&lt;/code&gt;.
+The file &lt;code&gt;./server/wikipedia.js&lt;/code&gt; wraps calls to these external APIs.&lt;/p&gt;
+
+&lt;h4 id="example-mediawiki-queries"&gt;Example Mediawiki Queries&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://en.wikipedia.org/w/api.php?action=opensearch&amp;amp;format=json&amp;amp;search=wiki"&gt;opensearch "wiki"&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://en.wikipedia.org/w/api.php?action=query&amp;amp;prop=pageimages&amp;amp;pithumbsize=100&amp;amp;format=json&amp;amp;titles=Wikipedia"&gt;pageimages query for "Wikipedia"&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id="the-client"&gt;The Client&lt;/h2&gt;
+
+&lt;h3 id="the-search-input-box"&gt;The Search Input Box&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code&gt;TopNavbar&lt;/code&gt; React component has the &lt;code&gt;history&lt;/code&gt; prop passed by &lt;code&gt;BrowserRouter&lt;/code&gt;.
+In the submit event handler, the successive path &lt;code&gt;/search&lt;/code&gt; is pushed to the &lt;code&gt;history&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id="the-routes"&gt;The Routes&lt;/h3&gt;
+
+&lt;p&gt;The home route &lt;code&gt;/&lt;/code&gt; in this app navigates to the &lt;code&gt;Home&lt;/code&gt; component that is just a placeholder containing only a link to an example thumbnail query.&lt;/p&gt;
+
+&lt;p&gt;The path &lt;code&gt;/search&lt;/code&gt; navigates to the &lt;code&gt;Gallery&lt;/code&gt; component for displaying a list of articles and thumbnails retrieved by the server.&lt;/p&gt;
+
+&lt;pre class="highlight xml"&gt;&lt;code&gt;        &lt;span class="nt"&gt;&amp;lt;Switch&lt;/span&gt; &lt;span class="na"&gt;location=&lt;/span&gt;&lt;span class="s"&gt;{isModal&lt;/span&gt; &lt;span class="err"&gt;?&lt;/span&gt; &lt;span class="err"&gt;this.previousLocation&lt;/span&gt; &lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="err"&gt;location}&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;Route&lt;/span&gt; &lt;span class="err"&gt;exact&lt;/span&gt; &lt;span class="na"&gt;path=&lt;/span&gt;&lt;span class="s"&gt;'/'&lt;/span&gt; &lt;span class="na"&gt;component=&lt;/span&gt;&lt;span class="s"&gt;{Home}/&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;Route&lt;/span&gt; &lt;span class="na"&gt;path=&lt;/span&gt;&lt;span class="s"&gt;'/search'&lt;/span&gt; &lt;span class="na"&gt;component=&lt;/span&gt;&lt;span class="s"&gt;{Gallery}&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;/Switch&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="modal-implementation-with-react-router"&gt;Modal Implementation with React-Router&lt;/h3&gt;
+
+&lt;p&gt;The implementation of modal window apparently mimics the "Modal Gallery" example of &lt;a href="https://reacttraining.com/react-router/web/example/modal-gallery"&gt;React Training / React Router&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Below is an excerpt from the client source.
+The &lt;code&gt;location.state&lt;/code&gt; object is defined when a smaller thumbnail is clicked.
+If the &lt;code&gt;isModal&lt;/code&gt; flag is set, the &lt;code&gt;Switch&lt;/code&gt; route is rendered according to the previous location (&lt;code&gt;this.previousLocation&lt;/code&gt;).
+And the &lt;code&gt;Modal&lt;/code&gt; component is placed on top of the previous rendering.&lt;/p&gt;
+
+&lt;pre class="highlight jsx"&gt;&lt;code&gt;  &lt;span class="nx"&gt;render&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;location&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;props&lt;/span&gt;
+    &lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;isModal&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;!!&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+      &lt;span class="nx"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;state&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+      &lt;span class="nx"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;state&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;modal&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+      &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;previousLocation&lt;/span&gt; &lt;span class="o"&gt;!==&lt;/span&gt; &lt;span class="nx"&gt;location&lt;/span&gt; &lt;span class="c1"&gt;// not initial render&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+      &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nc"&gt;Switch&lt;/span&gt; &lt;span class="na"&gt;location=&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;isModal&lt;/span&gt; &lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;previousLocation&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;location&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nc"&gt;Route&lt;/span&gt; &lt;span class="nt"&gt;exact&lt;/span&gt; &lt;span class="na"&gt;path=&lt;/span&gt;&lt;span class="s1"&gt;'/'&lt;/span&gt; &lt;span class="na"&gt;component=&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;Home&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="p"&gt;/&amp;gt;&lt;/span&gt;
+          &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nc"&gt;Route&lt;/span&gt; &lt;span class="na"&gt;path=&lt;/span&gt;&lt;span class="s1"&gt;'/search'&lt;/span&gt; &lt;span class="na"&gt;component=&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;Gallery&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt; &lt;span class="p"&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nc"&gt;Switch&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="si"&gt;{&lt;/span&gt;
+          &lt;span class="nx"&gt;isModal&lt;/span&gt;
+          &lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nc"&gt;Route&lt;/span&gt; &lt;span class="na"&gt;path=&lt;/span&gt;&lt;span class="s1"&gt;'/img'&lt;/span&gt; &lt;span class="na"&gt;component=&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;Modal&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt; &lt;span class="p"&gt;/&amp;gt;&lt;/span&gt;
+          &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt;
+        &lt;span class="si"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="the-api-invocation-and-the-state-transition"&gt;The API Invocation and the State Transition&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code&gt;Gallery&lt;/code&gt; component calls its &lt;code&gt;fetchThumbnails&lt;/code&gt; method when it is mounted or its props are to be updated.&lt;/p&gt;
+
+&lt;pre class="highlight jsx"&gt;&lt;code&gt;&lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;Gallery&lt;/span&gt; &lt;span class="kr"&gt;extends&lt;/span&gt; &lt;span class="nx"&gt;React&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Component&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;fetchThumbnails&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;params&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;dispatch&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;props&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;dispatch&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;loading&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;props&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;loading&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;params&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'fetchThumbnails'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;loading&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="nx"&gt;dispatch&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'START_SEARCHING_FOR_KEYWORD'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;axios&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'/api/search'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="na"&gt;params&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="na"&gt;kw&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt;&lt;span class="p"&gt;}})&lt;/span&gt;
+      &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;then&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;response&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;response&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"fetchThumbnails result"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;result&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;dispatch&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+          &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'RECEIVED_THUMBNAILS'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;thumbnails&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;result&lt;/span&gt;
+        &lt;span class="p"&gt;});&lt;/span&gt;
+      &lt;span class="p"&gt;})&lt;/span&gt;
+      &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;catch&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"Error in fetchThumbnails"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;dispatch&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+          &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'ERROR_IN_API'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;error&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;error&lt;/span&gt;
+        &lt;span class="p"&gt;});&lt;/span&gt;
+      &lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="nx"&gt;componentDidMount&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;query&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;queryString&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;parse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;props&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;fetchThumbnails&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;query&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;...&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This method invokes the server API. The API is called using &lt;code&gt;axios.get&lt;/code&gt;.
+It dispatches the following Redux actions during the asynchronous run.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Start of search:&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nl"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'START_SEARCHING_FOR_KEYWORD'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nx"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt; &lt;span class="cm"&gt;/* keyword from user */&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Completion of search:&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nl"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'RECEIVED_THUMBNAILS'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nx"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="cm"&gt;/* keyword from user */&lt;/span&gt;
+  &lt;span class="nx"&gt;thumbnails&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;result&lt;/span&gt; &lt;span class="cm"&gt;/* result of the API */&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Error:&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nl"&gt;type&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'ERROR_IN_API'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nx"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="cm"&gt;/* keyword from user */&lt;/span&gt;
+  &lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;error&lt;/span&gt; &lt;span class="cm"&gt;/* the error caught during axios.get */&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="the-reducer-for-redux-store"&gt;The Reducer for Redux Store&lt;/h3&gt;
+
+&lt;pre class="highlight jsx"&gt;&lt;code&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;INITIAL_STATE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="na"&gt;loading&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="na"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;''&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="na"&gt;thumbnails&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{},&lt;/span&gt;
+  &lt;span class="na"&gt;error&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kr"&gt;export&lt;/span&gt; &lt;span class="k"&gt;default&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;state&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;INITIAL_STATE&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;action&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;switch&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;action&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;type&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="s1"&gt;'START_SEARCHING_FOR_KEYWORD'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="na"&gt;loading&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="na"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;action&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="na"&gt;thumbnails&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{},&lt;/span&gt;
+        &lt;span class="na"&gt;error&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="s1"&gt;'RECEIVED_THUMBNAILS'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="na"&gt;loading&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="na"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;action&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="na"&gt;thumbnails&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;action&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;thumbnails&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="na"&gt;error&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="s1"&gt;'ERROR_IN_API'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="na"&gt;loading&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="na"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;action&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="na"&gt;thumbnails&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{},&lt;/span&gt;
+        &lt;span class="na"&gt;error&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;action&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="nl"&gt;default&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;state&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="testing-both-the-webpack-dev-server-of-create-react-app-and-express-api-server"&gt;Testing Both the Webpack Dev Server of create-react-app and Express API Server&lt;/h2&gt;
+
+&lt;p&gt;The client is made with &lt;code&gt;create-react-app&lt;/code&gt; so the Webpack Dev Server is used when testing on the development version of the app.
+Getting this server to work with the Express API server requires additional configurations below.&lt;/p&gt;
+
+&lt;p&gt;This article helped me a lot:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/"&gt;Fullstack React: How to get "create-react-app" to work with your API&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The following command is designated in &lt;code&gt;package.json&lt;/code&gt; as one of &lt;code&gt;scripts&lt;/code&gt; to start the two servers &lt;code&gt;concurrently&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;  &lt;span class="s2"&gt;"start"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"concurrently \"node server\" \"react-scripts start\""&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The actual command by &lt;code&gt;yarn run start&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;concurrently "node server" "react-scripts start"
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The Webpack dev server call the Express API via the proxy defined in the &lt;code&gt;package.json&lt;/code&gt; like below:&lt;/p&gt;
+
+&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;"proxy"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"/api"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+      &lt;/span&gt;&lt;span class="s2"&gt;"target"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"http://localhost:7070"&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If we are running the servers on a remote host (such as EC2 instance) instead of localhost, its host name must be specified to the &lt;code&gt;HOST&lt;/code&gt; variable in the &lt;code&gt;.env.development&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;HOST=ec2-xxx.compute.amazonaws.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="references"&gt;References&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://reacttraining.com/react-router/web/example/modal-gallery"&gt;React Training / React Router&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/"&gt;Fullstack React: How to get "create-react-app" to work with your API&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
   <entry>
     <title>Cytoscape.js powered Interactive Graph Visualization of WordNet Synsets</title>
     <link rel="alternate" href="http://shinaisan.github.io/2017/05/06/cytoscape-js-powered-interactive-graph-visualization-of-wordnet-synsets.html"/>
@@ -558,84 +832,6 @@ This example is meant to show how the propagation of method resolution works.&lt
 &lt;p&gt;&lt;/p&gt;
 
 &lt;script src="https://gist.github.com/shinaisan/85292c94d9c15a60abd4.js"&gt;&lt;/script&gt;
-
-</content>
-  </entry>
-  <entry>
-    <title>0-1 Knapsack Problem Sample Implementation</title>
-    <link rel="alternate" href="http://shinaisan.github.io/2015/08/01/0-1-knapsack-problem-sample-implementation.html"/>
-    <id>http://shinaisan.github.io/2015/08/01/0-1-knapsack-problem-sample-implementation.html</id>
-    <published>2015-08-01T13:59:00Z</published>
-    <updated>2017-04-21T07:46:05+09:00</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;/p&gt;
-
-&lt;h3 id="problem-statement"&gt;Problem Statement&lt;/h3&gt;
-
-&lt;p&gt;The 0-1 knapsack problem: find the maximum profit \(p\) below, by choosing items to put in the knapsack whose capacity is given by \(w\). There are \(n\) items and each item \(i,\ (1\leq i\leq n)\) has a weight \(w_i\) and a decision variable \(x_i\) that takes 1 if the item \(i\) is selected or 0 otherwise.&lt;/p&gt;
-
-&lt;div&gt;
-\[
-\begin{align*}
-&amp;amp; &amp;amp;&amp;amp; p = \max_{1\leq i\leq n}{p_i x_i} \\
-&amp;amp; \text{subject to} &amp;amp;&amp;amp;
-\sum_{i = 1}^n{w_i x_i} \leq w \\
-&amp;amp; &amp;amp;&amp;amp; x_i \in \left\{0, 1\right\}
-\end{align*}
-\]
-&lt;/div&gt;
-
-&lt;h3 id="sample-implementation"&gt;Sample Implementation&lt;/h3&gt;
-
-&lt;script src="https://gist.github.com/shinaisan/142117ca2271d58db152.js"&gt;&lt;/script&gt;
-
-&lt;h3 id="input"&gt;Input&lt;/h3&gt;
-
-&lt;p&gt;The format of the problem input for the above code is:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code&gt;[The capacity of the knapsack (w)]&lt;/code&gt; &lt;code&gt;[The number of items (n)]&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;For each item[k] (k = 1, 2, …, n) in turn:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code&gt;[Weight]&lt;/code&gt; &lt;code&gt;[Profit]&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id="dynamic-programing"&gt;Dynamic Programing&lt;/h3&gt;
-
-&lt;p&gt;The code above implements psuedo-polynomial time algorithm using dynamic programming.
-Assuming that \(\mathrm{dp}_{{i - 1},\ {x}}\) holds the solution of the smaller problem with \(n = i - 1\) and \(w = x\), the solution for \(n = i\) and \(w = x\) can be given by the following formula.&lt;/p&gt;
-
-&lt;div&gt;
-\[
- \mathrm{dp}_{i,\ x} =
- \begin{cases}
- \mathrm{dp}_{{i - 1},\ x} &amp;amp; \mbox{if } x \lt w_i
- \\
- \min\left\{ \mathrm{dp}_{{i - 1},_ x} ,\ \mathrm{dp}_{{i - 1},\ {x - w_i}} + p_i \right\}
- &amp;amp; \mbox{if } x \geq w_i
- \end{cases}
-\]
-&lt;/div&gt;
-
-&lt;p&gt;And obviously \(\mathrm{dp}_{0,\ x} = 0\).&lt;/p&gt;
-
-&lt;p&gt;The solution is \(\mathrm{dp}_{n,\ w}\).&lt;/p&gt;
-
-&lt;h3 id="backtracking"&gt;Backtracking&lt;/h3&gt;
-
-&lt;p&gt;The indices of chosen items in the optimal solution can be obtained by backtracking the above algorithm.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Initialize \(x \leftarrow w\).&lt;/li&gt;
-  &lt;li&gt;If \(\mathrm{dp}_ {n,\ x} \neq \mathrm{dp}_ {{n - 1},\ x}\), the item \(n\) was selected, so update 
-\(x \leftarrow x - w_n\). Leave \(x\) unchanged otherwise.&lt;/li&gt;
-  &lt;li&gt;If \(\mathrm{dp}_ {{n - 1}, x} \neq \mathrm{dp}_ {{n - 2}, x}\), the item \(n - 1\) was selected, so update \(x \leftarrow x - w_ {n - 1}\). Leave \(x\) unchanged otherwise.&lt;/li&gt;
-  &lt;li&gt;…&lt;/li&gt;
-&lt;/ul&gt;
 
 </content>
   </entry>
