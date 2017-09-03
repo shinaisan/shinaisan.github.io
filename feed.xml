@@ -5,10 +5,147 @@
   <id>http://shinaisan.github.io</id>
   <link href="http://shinaisan.github.io"/>
   <link href="http://shinaisan.github.io/feed.xml" rel="self"/>
-  <updated>2017-08-13T09:26:00Z</updated>
+  <updated>2017-09-03T02:37:00Z</updated>
   <author>
     <name>M. Shiina</name>
   </author>
+  <entry>
+    <title>Making a Menger Sponge with BeetleBlocks</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2017/09/03/making-menger-sponge-with-beetleblocks.html"/>
+    <id>http://shinaisan.github.io/2017/09/03/making-menger-sponge-with-beetleblocks.html</id>
+    <published>2017-09-03T02:37:00Z</published>
+    <updated>2017-09-03T20:24:10+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;My step by step process of making a Menger Sponge of level 3 using BeetleBlocks,
+a visual programming environment for 3D design that everyone can enjoy via the Web browser:&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id="youtube-video"&gt;Youtube video&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=MYzE-etgeck" target="_blank"&gt;
+&lt;img src="/images/img-2017-09-03/BB_R_Menger_L3.png" alt="Menger Sponge Level 3 with BeetleBlocks - YouTube" /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id="process"&gt;Process&lt;/h2&gt;
+
+&lt;p&gt;Repeatedly letting the beetle place a cube of unit length and move the same length forward makes a square bar.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Script for Bar" src="../../../images/img-2017-09-03/BB_S_Bar.png" /&gt;
+&lt;img alt="Bar" src="../../../images/img-2017-09-03/BB_R_Bar.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;It can trivially turn into a plate by nesting the bar making process within the outer &lt;code&gt;repeat&lt;/code&gt; with the y-coordinate shift (&lt;code&gt;change absolute y by 1&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Script for Plate" src="../../../images/img-2017-09-03/BB_S_Plate.png" /&gt;
+&lt;img alt="Plate" src="../../../images/img-2017-09-03/BB_R_Plate.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nesting once more in the same way produces a (bigger) cube.
+Moving around a block of code without breaking its syntactic structure is where a visual programming language really shines.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Script for Cube" src="../../../images/img-2017-09-03/BB_S_Cube.png" /&gt;
+&lt;img alt="Cube" src="../../../images/img-2017-09-03/BB_R_Cube.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Skipping a cube randomly still yields a cube but sponge look and feel emerge.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Script for Sponge" src="../../../images/img-2017-09-03/BB_S_Sponge.png" /&gt;
+&lt;img alt="Cube" src="../../../images/img-2017-09-03/BB_R_Sponge.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Before attempting to turn it into a Menger sponge,
+we wrap the conditional in a predicate named &lt;code&gt;menger&lt;/code&gt; as a preparation.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Script for Predicate" src="../../../images/img-2017-09-03/BB_S_Predicate.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Another preparation, the &lt;code&gt;floor&lt;/code&gt; reporter using &lt;code&gt;round&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Script for Floor" src="../../../images/img-2017-09-03/BB_S_Floor_Reporter.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now the groundwork is done, we try implementing the Menger sponge of level 1 (&lt;code&gt;iteration = 1&lt;/code&gt;). The interface of the &lt;code&gt;menger&lt;/code&gt; predicate is tabulated below.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Input&lt;/th&gt;
+      &lt;th&gt;Expected Actual Value&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;x, y, z&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The position of the beetle.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;iterations&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The number of iterations (The level) of a Menger sponge.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;x1&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The starting x-coordinate (inclusive) of the sponge.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;x2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The terminating x-coordinate (exclusive) of the sponge.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;y1&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The starting y-coordinate (inclusive) of the sponge.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;y2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The terminating y-coordinate (exclusive) of the sponge.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;z1&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The starting z-coordinate (inclusive) of the sponge.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;z2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The terminating z-coordinate (exclusive) of the sponge.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Output&lt;/th&gt;
+      &lt;th&gt;Condition&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The given point lies in a cell constituting the sponge (not in a hole).&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;The given point is in a hole of the sponge.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;A "hole" is made if two of the coordinates lie in middle thirds.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Script for Menger Sponge Level 1" src="../../../images/img-2017-09-03/BB_S_Menger_L1.png" /&gt;
+&lt;img alt="Cube" src="../../../images/img-2017-09-03/BB_R_Menger_L1.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;The final step is making the &lt;code&gt;menger&lt;/code&gt; predicate recursive.
+The recursion terminates if the &lt;code&gt;iterations (level)&lt;/code&gt; equals to zero.
+A level-0 Menger sponge is just a cube without any hole in it. Hence, the predicate returns &lt;code&gt;true&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Script for Recursion Termination" src="../../../images/img-2017-09-03/BB_S_Menger_Termination.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;If the level is greater than zero, we recalculate the range of a sub-sponge and recurse down one level (&lt;code&gt;iterations - 1&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Script for Recursion" src="../../../images/img-2017-09-03/BB_S_Menger_Recursion.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Voila!&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Menger Sponge Level 3" src="../../../images/img-2017-09-03/BB_R_Menger_L3.png" /&gt;&lt;/p&gt;
+
+</content>
+  </entry>
   <entry>
     <title>Making a Simple Image Viewer using React and Express</title>
     <link rel="alternate" href="http://shinaisan.github.io/2017/08/13/making-a-simple-image-viewer-using-react-and-express.html"/>
@@ -815,23 +952,6 @@ This example is meant to show how the propagation of method resolution works.&lt
   &lt;li&gt;&lt;a href="https://github.com/dmendel/bindata"&gt;BinData - Parsing Binary Data in Ruby&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href="https://github.com/dmendel/bindata/wiki/CompoundTypes#read_until"&gt;:read_until&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
-</content>
-  </entry>
-  <entry>
-    <title>Trying out git-submodule</title>
-    <link rel="alternate" href="http://shinaisan.github.io/2015/08/02/trying-out-git-submodule.html"/>
-    <id>http://shinaisan.github.io/2015/08/02/trying-out-git-submodule.html</id>
-    <published>2015-08-02T07:51:00Z</published>
-    <updated>2017-04-21T07:46:05+09:00</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;p&gt;T/O&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;script src="https://gist.github.com/shinaisan/85292c94d9c15a60abd4.js"&gt;&lt;/script&gt;
 
 </content>
   </entry>
