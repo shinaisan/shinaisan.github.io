@@ -21,19 +21,126 @@
     src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
     integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
     crossorigin="anonymous"></script>
-    <script type="text/javascript" src="search-engine-list.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+          var clipboard = new Clipboard("#button-copy");
+      });
+    </script>
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
     <div id="root"></div>
-    <form onsubmit="return onKeywordGiven();">
+    <form onsubmit="return false;">
       <label>Keyword</label>
       <input id="keyword" type="text" size="100%"></input>
+      <button id="button-copy" type="submit" data-clipboard-target="#keyword">Copy</button>
     </form>
-    <h3 id="current"></h3>
+    <h3 id="current">Search</h3>
+
     <div id="buttons">
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="https://duckduckgo.com/"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">DuckDuckGo</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="http://www.google.com/search?hl=en&ie=utf-8&oe=utf-8"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">Google</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="http://www.google.com/search?hl=ja&ie=utf-8&oe=utf-8"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">Google_JP</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="http://eow.alc.co.jp/"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">Alc</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="https://www.google.com/search?btnG=Search+Books&tbm=bks&tbo=1"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">Books</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="https://scholar.google.com/scholar?hl=en&btnG=&lr="
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">Scholar</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="https://www.merriam-webster.com/"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">Merriam</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="https://www.amazon.com"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">Amazon</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="https://www.amazon.co.jp/"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">Amazon JP</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="https://www.ebay.com/"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">eBay</p>
+        <span>&nbsp;</span>
+      </a>
+      <a
+        class="btn btn-dark btn-lg"
+        target="_blank"
+        href="https://twitter.com/search-home"
+        >
+        <span class="fa fa-search"></span>
+        <p class="lead">Twitter Search</p>
+        <span>&nbsp;</span>
+      </a>
+
     </div>
   </body>
 </html>
