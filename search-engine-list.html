@@ -26,6 +26,22 @@
       $(function() {
           var clipboard = new Clipboard("#button-copy");
       });
+      $(document).keydown(function(e) {
+          if (e.which === 191) {
+          e.preventDefault();
+          $("#keyword").focus();
+          }
+      });
+      function focusButton() {
+        var name = $("#engine").val();
+        var a = $("#buttons a p.lead").filter(function(i, e) {
+            return ($(e).text() === name);
+            }).closest("a");
+        if (a.length > 0) {
+          a.focus();
+        }
+        return false;
+      }
     </script>
   </head>
   <body>
@@ -37,6 +53,24 @@
       <label>Keyword</label>
       <input id="keyword" type="text" size="100%"></input>
       <button id="button-copy" type="submit" data-clipboard-target="#keyword">Copy</button>
+    </form>
+    <form onsubmit="return focusButton();">
+      <label>Jump</label>
+      <input id="engine" type="text" size="100%" list="engines"></input>
+      <datalist id="engines">
+        <option value="DuckDuckGo" >
+        <option value="Google" >
+        <option value="Google_JP" >
+        <option value="Alc" >
+        <option value="Books" >
+        <option value="Scholar" >
+        <option value="Merriam" >
+        <option value="Amazon" >
+        <option value="Amazon JP" >
+        <option value="eBay" >
+        <option value="Twitter Search" >
+      </datalist>
+      <button id="button-jump" type="submit">Jump</button>
     </form>
     <h3 id="current">Search</h3>
 
