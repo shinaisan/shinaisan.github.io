@@ -1,0 +1,485 @@
+<!doctype html> 
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="IE=edge;chrome=1" http-equiv="X-UA-Compatible" />
+    <title>My gh-pages | Latin Square and Sudoku Solver Using SAT Solver (JavaScript logic-solver)</title>
+    <meta content="<p>Latin squares and Sudoku programatically generated are show below.
+These are screenshots of web apps created using JavaScript and a SAT solver library.</p>
+
+<p>" name="description" />
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" /><!--[if lt IE 9]><script src="../../../js/ie8.js" type="text/javascript"></script><![endif]--><link href="../../../css/all.css" media="screen" rel="stylesheet" type="text/css" /><script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="/">My gh-pages</a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="https://github.com/shinaisan"> About</a>
+            </li>
+            <li>
+              <a href="https://github.com/shinaisan"><i class="fa fa-github-square fa-lg fa-inverse"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-3">
+          <div class="well">
+            <h4>
+              Tags
+            </h4>
+            <ul class="list-unstyled">
+              <li>
+                <a href="/tags/git.html">Git</a> (1)
+              </li>
+              <li>
+                <a href="/tags/snippet.html">Snippet</a> (5)
+              </li>
+              <li>
+                <a href="/tags/gdb.html">GDB</a> (1)
+              </li>
+              <li>
+                <a href="/tags/debugging.html">Debugging</a> (1)
+              </li>
+              <li>
+                <a href="/tags/mqtt.html">MQTT</a> (1)
+              </li>
+              <li>
+                <a href="/tags/mosquitto.html">Mosquitto</a> (1)
+              </li>
+              <li>
+                <a href="/tags/network.html">Network</a> (1)
+              </li>
+              <li>
+                <a href="/tags/protocol.html">Protocol</a> (1)
+              </li>
+              <li>
+                <a href="/tags/python.html">Python</a> (1)
+              </li>
+              <li>
+                <a href="/tags/javascript.html">JavaScript</a> (4)
+              </li>
+              <li>
+                <a href="/tags/sudoku.html">Sudoku</a> (1)
+              </li>
+              <li>
+                <a href="/tags/math.html">Math</a> (1)
+              </li>
+              <li>
+                <a href="/tags/combinatorics.html">Combinatorics</a> (1)
+              </li>
+              <li>
+                <a href="/tags/latin_square.html">Latin_Square</a> (1)
+              </li>
+              <li>
+                <a href="/tags/puzzle.html">Puzzle</a> (1)
+              </li>
+              <li>
+                <a href="/tags/sat.html">SAT</a> (1)
+              </li>
+              <li>
+                <a href="/tags/solver.html">Solver</a> (1)
+              </li>
+              <li>
+                <a href="/tags/3d.html">3D</a> (1)
+              </li>
+              <li>
+                <a href="/tags/graphics.html">Graphics</a> (1)
+              </li>
+              <li>
+                <a href="/tags/beetleblocks.html">BeetleBlocks</a> (1)
+              </li>
+              <li>
+                <a href="/tags/visual.html">Visual</a> (1)
+              </li>
+              <li>
+                <a href="/tags/programming.html">Programming</a> (1)
+              </li>
+              <li>
+                <a href="/tags/fractal.html">Fractal</a> (1)
+              </li>
+              <li>
+                <a href="/tags/ruby.html">Ruby</a> (4)
+              </li>
+              <li>
+                <a href="/tags/mruby.html">mruby</a> (1)
+              </li>
+              <li>
+                <a href="/tags/graph.html">graph</a> (1)
+              </li>
+              <li>
+                <a href="/tags/visualization.html">visualization</a> (1)
+              </li>
+              <li>
+                <a href="/tags/nlp.html">NLP</a> (1)
+              </li>
+              <li>
+                <a href="/tags/wordnet.html">WordNet</a> (1)
+              </li>
+              <li>
+                <a href="/tags/c.html">C++</a> (2)
+              </li>
+              <li>
+                <a href="/tags/algorithm.html">Algorithm</a> (2)
+              </li>
+              <li>
+                <a href="/tags/aws.html">AWS</a> (1)
+              </li>
+              <li>
+                <a href="/tags/ubuntu.html">Ubuntu</a> (1)
+              </li>
+              <li>
+                <a href="/tags/rbenv.html">rbenv</a> (1)
+              </li>
+              <li>
+                <a href="/tags/wikipedia.html">Wikipedia</a> (1)
+              </li>
+              <li>
+                <a href="/tags/thumbnail.html">thumbnail</a> (1)
+              </li>
+              <li>
+                <a href="/tags/image.html">image</a> (1)
+              </li>
+              <li>
+                <a href="/tags/viewer.html">viewer</a> (1)
+              </li>
+              <li>
+                <a href="/tags/react.html">React</a> (1)
+              </li>
+              <li>
+                <a href="/tags/redux.html">Redux</a> (1)
+              </li>
+              <li>
+                <a href="/tags/react-router.html">react-router</a> (1)
+              </li>
+              <li>
+                <a href="/tags/bootstrap.html">Bootstrap</a> (1)
+              </li>
+              <li>
+                <a href="/tags/express.html">Express</a> (1)
+              </li>
+              <li>
+                <a href="/tags/node.html">Node</a> (1)
+              </li>
+              <li>
+                <a href="/tags/middleman.html">Middleman</a> (1)
+              </li>
+              <li>
+                <a href="/tags/bindata.html">BinData</a> (1)
+              </li>
+            </ul>
+          </div>
+          <div class="well">
+            <h4>
+              By year
+            </h4>
+            <ol>
+              <li>
+                <a href="/2017.html">2017</a> (4)
+              </li>
+              <li>
+                <a href="/2015.html">2015</a> (9)
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="col-lg-9 col-md-9">
+          <h1>
+            Latin Square and Sudoku Solver Using SAT Solver (JavaScript logic-solver)
+          </h1>
+          <small class="label label-default">JavaScript</small>
+          <small class="label label-default">Sudoku</small>
+          <small class="label label-default">Math</small>
+          <small class="label label-default">Combinatorics</small>
+          <small class="label label-default">Latin_Square</small>
+          <small class="label label-default">Puzzle</small>
+          <small class="label label-default">SAT</small>
+          <small class="label label-default">Solver</small>
+          <hr />
+          <p>
+            <span class="glyphicon glyphicon-time"></span> Posted on Nov 24
+          </p>
+          <hr /><p>Latin squares and Sudoku programatically generated are show below.
+These are screenshots of web apps created using JavaScript and a SAT solver library.</p>
+
+<p></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Example: Latin Squares <sup id="fnref:latin-square-wikipedia"><a href="#fn:latin-square-wikipedia" class="footnote">1</a></sup> of size 5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img alt="Latin Squares of size 5" src="../../../images/img-2017-11-24/SAT_logic-solver_Latin_Squares_5.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Example: Sudoku <sup id="fnref:sudoku-wikipedia"><a href="#fn:sudoku-wikipedia" class="footnote">2</a></sup></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img alt="Sudoku" src="../../../images/img-2017-11-24/SAT_logic-solver_Sudoku_small.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>These problems can be expressed as
+Boolean satisfiability problems (SAT) <sup id="fnref:sat-wikipedia"><a href="#fn:sat-wikipedia" class="footnote">3</a></sup>
+and solved using a SAT solver.</p>
+
+<p>I chose the 
+<a href="https://github.com/meteor/logic-solver"><code>logic-solver</code></a><sup id="fnref:logic-solver-github"><a href="#fn:logic-solver-github" class="footnote">4</a></sup>
+JavaScript library to solve Latin squares and Sudoku.
+The central part of the program is listed below.
+More details will follow later in this page.</p>
+
+<pre class="highlight javascript"><code><span class="c1">// solver: an instance of Logic.Solver where Logic is the logic-solver module.</span>
+<span class="c1">// vars: a multi-dimensional (n x n x n) array of variable names.</span>
+<span class="c1">// range: a utility function to make an array of integers from 1 to n.</span>
+<span class="kd">function</span> <span class="nx">latinSquare</span><span class="p">(</span><span class="nx">solver</span><span class="p">,</span> <span class="nx">vars</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">vars</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">j</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">solver</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="nx">Logic</span><span class="p">.</span><span class="nx">exactlyOne</span><span class="p">(</span><span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">vars</span><span class="p">[</span><span class="nx">k</span><span class="p">][</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]))));</span>
+      <span class="nx">solver</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="nx">Logic</span><span class="p">.</span><span class="nx">exactlyOne</span><span class="p">(</span><span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">vars</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">k</span><span class="p">][</span><span class="nx">j</span><span class="p">]))));</span>
+      <span class="nx">solver</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="nx">Logic</span><span class="p">.</span><span class="nx">exactlyOne</span><span class="p">(</span><span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">vars</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">][</span><span class="nx">k</span><span class="p">]))));</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">sudoku</span><span class="p">(</span><span class="nx">solver</span><span class="p">,</span> <span class="nx">vars</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">vars</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="kr">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">n</span><span class="p">));</span>
+  <span class="nx">latinSquare</span><span class="p">(</span><span class="nx">solver</span><span class="p">,</span> <span class="nx">vars</span><span class="p">);</span>
+  <span class="nx">range</span><span class="p">(</span><span class="nx">m</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">range</span><span class="p">(</span><span class="nx">m</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">j</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">solver</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="nx">Logic</span><span class="p">.</span><span class="nx">exactlyOne</span><span class="p">(</span>
+          <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">l</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
+            <span class="nx">vars</span><span class="p">[</span><span class="nx">m</span><span class="o">*</span><span class="nx">i</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">l</span><span class="o">/</span><span class="nx">m</span><span class="p">)][</span><span class="nx">m</span><span class="o">*</span><span class="nx">j</span> <span class="o">+</span> <span class="p">(</span><span class="nx">l</span><span class="o">%</span><span class="nx">m</span><span class="p">)][</span><span class="nx">k</span><span class="p">]</span>
+          <span class="p">))));</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre>
+<h2 id="sample-apps">Sample Apps</h2>
+
+<ul>
+  <li><a href="https://github.com/shinaisan/sat-latin-square">sat-latin-square</a></li>
+  <li><a href="https://github.com/shinaisan/sat-sudoku-solver">sat-sudoku-solver</a></li>
+</ul>
+
+<h3 id="how-to-run-the-apps">How to Run the Apps</h3>
+
+<p>To run the apps, Node.js is required.
+Each demo app runs as a server and can be launched as below:</p>
+
+<pre class="highlight shell"><code><span class="c"># Correct the following placeholders REPO and THE_DIR_OF_CLONED_REPO.</span>
+git clone <span class="nv">$REPO</span>
+<span class="nb">cd</span> <span class="nv">$THE_DIR_OF_CLONED_REPO</span>
+yarn install
+yarn run start
+</code></pre>
+<p>The app can be accessed via a web browser. The default port is 3000.</p>
+
+<p>The Latin squares demo (<code>sat-latin-square</code>) has a form to enter a problem size
+(from 2 to 6).
+It starts generating (reduced) Latin squares of given size upon submission of the form.
+To avoid heavy computational load,
+not all the solutions are shown.</p>
+
+<p>The Sudoku demo (<code>sat-sudoku-solver</code>) has two grids.
+A partial assignment can be specified on the left grid.
+The solver starts upon pressing the Solve button
+and shows a solution, if any, on the right grid.</p>
+
+<h2 id="usage-of-logic-solver-in-the-apps">Usage of <code>logic-solver</code> in the Apps</h2>
+
+<p>I use a variable <code>Logic</code> to refer to the module <code>logic-solver</code>.</p>
+
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">Logic</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'logic-solver'</span><span class="p">);</span>
+</code></pre>
+<p>Before constructing logical constraints,
+some utility functions are defined.
+The <code>range</code> function generates an array containing integers
+ranging from zero to n-1.</p>
+
+<pre class="highlight javascript"><code><span class="kd">function</span> <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">fill</span><span class="p">().</span><span class="nx">map</span><span class="p">((</span><span class="nx">x</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">i</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre>
+<p>The <code>genVars</code> function generates variable names
+each of which is indexed by a triple (r, c, s)
+where r, c and s each indicates a row index, a column index
+and a symbol respectively.
+An index has the dimension of size x size x size.
+A pair (r, c) specifies a cell in a Latin square.
+Only one variable for each cell can have a true value.
+A set of (r, c, s) triples for all the true variables
+is the orthogonal array representation of a Latin square.</p>
+
+<pre class="highlight javascript"><code><span class="kd">function</span> <span class="nx">genVars</span><span class="p">(</span><span class="nx">prefix</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">range</span><span class="p">(</span><span class="nx">size</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
+    <span class="nx">range</span><span class="p">(</span><span class="nx">size</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">j</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
+      <span class="nx">range</span><span class="p">(</span><span class="nx">size</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
+        <span class="p">[</span><span class="nx">prefix</span><span class="p">,</span> <span class="nx">i</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="nx">j</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="nx">k</span><span class="p">.</span><span class="nx">toString</span><span class="p">()].</span><span class="nx">join</span><span class="p">(</span><span class="s1">'_'</span><span class="p">)</span>
+      <span class="p">))</span>
+    <span class="p">))</span>
+  <span class="p">));</span>
+<span class="p">}</span>
+</code></pre>
+<p>A Latin square is an n x n array filled with n different symbols.
+The function latinSquare constructs a logical formula
+expressing the conjunction of the following logical conditions</p>
+
+<ul>
+  <li>Each symbol must occur exactly once in each column.</li>
+  <li>Each symbol must occur exactly once in each row.</li>
+  <li>Each cell of a square must have exactly one symbol.</li>
+</ul>
+
+<p>The <code>exactlyOne</code> function returns an expression
+requiring that only one of the variables given must be true 
+and thus can be used to express each one of the above conditions.
+The <code>require</code> method is called
+to instruct the solver that the given condition must be met
+to satisfy the whole logical formula.</p>
+
+<pre class="highlight javascript"><code><span class="c1">// vars = genVars('v', n)</span>
+<span class="kd">function</span> <span class="nx">latinSquare</span><span class="p">(</span><span class="nx">solver</span><span class="p">,</span> <span class="nx">vars</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">vars</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">j</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">solver</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="nx">Logic</span><span class="p">.</span><span class="nx">exactlyOne</span><span class="p">(</span><span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">vars</span><span class="p">[</span><span class="nx">k</span><span class="p">][</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]))));</span>
+      <span class="nx">solver</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="nx">Logic</span><span class="p">.</span><span class="nx">exactlyOne</span><span class="p">(</span><span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">vars</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">k</span><span class="p">][</span><span class="nx">j</span><span class="p">]))));</span>
+      <span class="nx">solver</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="nx">Logic</span><span class="p">.</span><span class="nx">exactlyOne</span><span class="p">(</span><span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">vars</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">][</span><span class="nx">k</span><span class="p">]))));</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre>
+<p>Finally, Sudoku is defined as a Latin square with
+an additional <em>alldifferent</em> constraint on each subgrid
+that has the dimension m x m where m x m = n.</p>
+
+<pre class="highlight javascript"><code><span class="kd">function</span> <span class="nx">sudoku</span><span class="p">(</span><span class="nx">solver</span><span class="p">,</span> <span class="nx">vars</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">vars</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="kr">const</span> <span class="nx">m</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">n</span><span class="p">));</span>
+  <span class="nx">latinSquare</span><span class="p">(</span><span class="nx">solver</span><span class="p">,</span> <span class="nx">vars</span><span class="p">);</span>
+  <span class="nx">range</span><span class="p">(</span><span class="nx">m</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">range</span><span class="p">(</span><span class="nx">m</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">j</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">solver</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="nx">Logic</span><span class="p">.</span><span class="nx">exactlyOne</span><span class="p">(</span>
+          <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">l</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
+            <span class="nx">vars</span><span class="p">[</span><span class="nx">m</span><span class="o">*</span><span class="nx">i</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">l</span><span class="o">/</span><span class="nx">m</span><span class="p">)][</span><span class="nx">m</span><span class="o">*</span><span class="nx">j</span> <span class="o">+</span> <span class="p">(</span><span class="nx">l</span><span class="o">%</span><span class="nx">m</span><span class="p">)][</span><span class="nx">k</span><span class="p">]</span>
+          <span class="p">))));</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre>
+<p>Running the (Sudoku) solver and obtaining a possible solution is as trivial as the following snippet:</p>
+
+<pre class="highlight javascript"><code>    <span class="kr">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+    <span class="kr">const</span> <span class="nx">solver</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Logic</span><span class="p">.</span><span class="nx">Solver</span><span class="p">();</span>
+    <span class="nx">sudoku</span><span class="p">(</span><span class="nx">solver</span><span class="p">,</span> <span class="nx">genVars</span><span class="p">(</span><span class="s1">'v'</span><span class="p">,</span> <span class="nx">n</span><span class="p">));</span>
+    <span class="kr">const</span> <span class="nx">solution</span> <span class="o">=</span> <span class="nx">solver</span><span class="p">.</span><span class="nx">solve</span><span class="p">();</span>
+</code></pre>
+<p>If no solutions are found, <code>solution</code> is <code>null</code>.
+Using this fact allows us to get all the possible solutions
+by iterating the <code>solve()</code> method until it returns <code>null</code>.</p>
+
+<p>An assignment that satisfies the constraints can be obtained
+by using the <code>solution.getMap()</code> method
+that returns a dictionary object that maps
+a variable name to its Boolean value assignment.</p>
+
+<hr />
+
+<p>I am really impressed at how useful a SAT solver can be.
+Latin squares (and Sudoku) seemed to me really complex at first
+but can be expressed very concisely with <code>logic-solver</code>.
+I am wondering whether I want to further study this interesting technology
+instead of just purposelessly producing toy programs like above.</p>
+
+<h2 id="references">References</h2>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:latin-square-wikipedia">
+      <p><a href="https://en.wikipedia.org/wiki/Latin_square">Latin square</a>&nbsp;<a href="#fnref:latin-square-wikipedia" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:sudoku-wikipedia">
+      <p><a href="https://en.wikipedia.org/wiki/Sudoku">Sudoku</a>&nbsp;<a href="#fnref:sudoku-wikipedia" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:sat-wikipedia">
+      <p><a href="https://en.wikipedia.org/wiki/Boolean_satisfiability_problem">Boolean satisfiability problem - Wikipedia</a>&nbsp;<a href="#fnref:sat-wikipedia" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:logic-solver-github">
+      <p><a href="https://github.com/meteor/logic-solver"><code>logic-solver</code></a>&nbsp;<a href="#fnref:logic-solver-github" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+          <aside>
+            <h3>
+              Recent Articles
+            </h3>
+            <ol>
+              <li>
+                <a href="/2017/11/24/latin-square-and-sudoku-solver-using-sat-solver-javascript-logic-solver.html">Latin Square and Sudoku Solver Using SAT Solver (JavaScript logic-solver)</a> <span>Nov 24</span> 
+              </li>
+              <li>
+                <a href="/2017/09/03/making-menger-sponge-with-beetleblocks.html">Making a Menger Sponge with BeetleBlocks</a> <span>Sep  3</span> 
+              </li>
+              <li>
+                <a href="/2017/08/13/making-a-simple-image-viewer-using-react-and-express.html">Making a Simple Image Viewer using React and Express</a> <span>Aug 13</span> 
+              </li>
+              <li>
+                <a href="/2017/05/06/cytoscape-js-powered-interactive-graph-visualization-of-wordnet-synsets.html">Cytoscape.js powered Interactive Graph Visualization of WordNet Synsets</a> <span>May  6</span> 
+              </li>
+              <li>
+                <a href="/2015/12/22/browsing-task-dependencies-in-the-rakefile-of-mruby-using-jstree.html">Browsing Task Dependencies in the Rakefile of mruby using jsTree</a> <span>Dec 22</span> 
+              </li>
+              <li>
+                <a href="/2015/10/06/inspecting-the-retransmission-behavior-of-the-mosquitto-mqtt-broker-with-gdb.html">Inspecting the Retransmission Behavior of the Mosquitto MQTT Broker with GDB</a> <span>Oct  6</span> 
+              </li>
+              <li>
+                <a href="/2015/08/05/example-of-read_until-parameter-of-bindata-array.html">Example of read_until parameter of BinData::Array</a> <span>Aug  5</span> 
+              </li>
+              <li>
+                <a href="/2015/08/02/trying-out-git-submodule.html">Trying out git-submodule</a> <span>Aug  2</span> 
+              </li>
+              <li>
+                <a href="/2015/08/01/0-1-knapsack-problem-sample-implementation.html">0-1 Knapsack Problem Sample Implementation</a> <span>Aug  1</span> 
+              </li>
+              <li>
+                <a href="/2015/07/31/some-practice-examples-of-range-minimum-query-rmq.html">Some Practice Examples of Range Minimum Query (RMQ)</a> <span>Jul 31</span> 
+              </li>
+            </ol>
+          </aside>
+          <hr>
+            <p class="text-center">
+              2015 <a href="/">My gh-pages</a>
+            </p>
+          </hr>
+        </div>
+      </div>
+    </div>
+    <script src="../../../js/all.js" type="text/javascript"></script>
+  </body>
+</html>
