@@ -5,10 +5,101 @@
   <id>http://shinaisan.github.io</id>
   <link href="http://shinaisan.github.io"/>
   <link href="http://shinaisan.github.io/feed.xml" rel="self"/>
-  <updated>2017-11-24T03:24:00Z</updated>
+  <updated>2018-08-18T05:56:00Z</updated>
   <author>
     <name>M. Shiina</name>
   </author>
+  <entry>
+    <title>Greedy Set Cover Sample Implementation</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2018/08/18/greedy-set-cover-sample-implementation.html"/>
+    <id>http://shinaisan.github.io/2018/08/18/greedy-set-cover-sample-implementation.html</id>
+    <published>2018-08-18T05:56:00Z</published>
+    <updated>2018-08-22T19:08:26+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id="problem-statement"&gt;Problem Statement&lt;/h3&gt;
+
+&lt;p&gt;Set cover problem: Given the universe \(\mathcal{U}\)
+and the set \(\mathcal{S}\) of subsets of \(\mathcal{U}\),
+find the collection \(\mathcal{C}\) of subsets from \(\mathcal{S}\)
+that covers the universe while minimizing the total cost
+where&lt;/p&gt;
+
+&lt;div&gt;
+\begin{align}
+ \mathcal{U} &amp;amp;= \{ 1,2,\cdots,n \} \\
+ \bigcup_{s\in\mathcal{S}} s &amp;amp;= \mathcal{U} \\
+ \bigcup_{s\in\mathcal{C}} s &amp;amp;= \mathcal{U}
+\end{align}
+&lt;/div&gt;
+
+&lt;p&gt;and the objective is to …&lt;/p&gt;
+
+&lt;div&gt;\[
+\text{minimize}\qquad
+{\sum_{s\in\mathcal{C}}\mathrm{cost}{(s)}}
+\]&lt;/div&gt;
+
+&lt;h3 id="sample-implementation"&gt;Sample Implementation&lt;/h3&gt;
+
+&lt;script src="https://gist.github.com/shinaisan/76ee2c9a285f180ba2fc966a4e3b284c.js"&gt;&lt;/script&gt;
+
+&lt;h3 id="input"&gt;Input&lt;/h3&gt;
+
+&lt;p&gt;The format of the problem input for the above code is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;[the cardinality of the universe] [the number of the subsets given below]&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;[cost of the subset 0] [the size of the subset 0] [the first element] ...&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;[cost of the subset 1] [the size of the subset 1] [the first element] ...&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;...&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="run"&gt;Run&lt;/h3&gt;
+
+&lt;p&gt;The following snippet shows the usage of the &lt;code&gt;greedy_set_cover&lt;/code&gt; class.
+It takes an input from an input stream and translates the input
+into its internal parameters, the universe cardinality and the subsets,
+according to the input format above.&lt;/p&gt;
+
+&lt;pre class="highlight cpp"&gt;&lt;code&gt;  &lt;span class="n"&gt;greedy_set_cover&lt;/span&gt; &lt;span class="n"&gt;sc&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="n"&gt;istringstream&lt;/span&gt; &lt;span class="n"&gt;iss&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;src&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// Input string in the above input format.
+&lt;/span&gt;
+  &lt;span class="n"&gt;sc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;input&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;iss&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// Feed the input.
+&lt;/span&gt;  &lt;span class="n"&gt;sc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;solve&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// Solve the problem.
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;solve&lt;/code&gt; method show the selection of subsets,
+each represented with an 0-based integer, and the total cost incurred
+by that selection.&lt;/p&gt;
+
+&lt;h3 id="greedy-algorithm"&gt;Greedy Algorithm&lt;/h3&gt;
+
+&lt;p&gt;The implementation is roughly summarized as a pseudo code below:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;GREEDY-SET-COVER&lt;/strong&gt;(\(\mathcal{U}\), \(\mathcal{S}\), \(\mathrm{cost}\)):
+    &lt;ul&gt;
+      &lt;li&gt;\(\mathrm{COVERED} \leftarrow \Phi\) &lt;em&gt;// Elements covered so far.&lt;/em&gt;&lt;/li&gt;
+      &lt;li&gt;\(\mathcal{C} \leftarrow \Phi\)&lt;/li&gt;
+      &lt;li&gt;\(\mathrm{COST} \leftarrow 0\) &lt;em&gt;// Total cost so far.&lt;/em&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;WHILE&lt;/strong&gt; \({|\mathrm{COVERED}|} \lt {|\mathcal{U}|} \):
+        &lt;ul&gt;
+          &lt;li&gt;\(s \leftarrow \mathrm{argmin}_{s\in\mathcal{S}} { \frac{\mathrm{cost}{(s)}}{|{s - \mathrm{COVERED}}|} } \)&lt;/li&gt;
+          &lt;li&gt;\(\mathrm{COVERED} \leftarrow \mathrm{COVERED} \cup s \)&lt;/li&gt;
+          &lt;li&gt;\(\mathcal{C} \leftarrow \mathcal{C} \cup \{s\} \)&lt;/li&gt;
+          &lt;li&gt;\(\mathrm{COST} \leftarrow \mathrm{COST} + \mathrm{cost}{(s)} \)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;RETURN&lt;/strong&gt; \(\mathrm{COST},\ \mathcal{C}\)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
   <entry>
     <title>Latin Square and Sudoku Solver Using SAT Solver (JavaScript logic-solver)</title>
     <link rel="alternate" href="http://shinaisan.github.io/2017/11/24/latin-square-and-sudoku-solver-using-sat-solver-javascript-logic-solver.html"/>
@@ -1032,140 +1123,6 @@ There is also another extra parameter &lt;code&gt;jump&lt;/code&gt; in the outpu
   &lt;li&gt;&lt;a href="https://www.jstree.com/"&gt;jsTree&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-</content>
-  </entry>
-  <entry>
-    <title>Inspecting the Retransmission Behavior of the Mosquitto MQTT Broker with GDB</title>
-    <link rel="alternate" href="http://shinaisan.github.io/2015/10/06/inspecting-the-retransmission-behavior-of-the-mosquitto-mqtt-broker-with-gdb.html"/>
-    <id>http://shinaisan.github.io/2015/10/06/inspecting-the-retransmission-behavior-of-the-mosquitto-mqtt-broker-with-gdb.html</id>
-    <published>2015-10-06T13:06:00Z</published>
-    <updated>2017-04-21T07:46:05+09:00</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;p&gt;I just wanted to actually see how the Mosquitto MQTT broker retransmit packets when a communication is interrupted and confirm the effect of the &lt;code&gt;retry_interval&lt;/code&gt; config variable. Steps are as follows.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h3 id="environment"&gt;Environment&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Linux 3.13.0-48-generic Ubuntu SMP 86_64 GNU/Linux&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id="building-mosquitto"&gt;Building Mosquitto&lt;/h3&gt;
-
-&lt;h4 id="installing-required-packages"&gt;Installing Required Packages&lt;/h4&gt;
-
-&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;sudo apt-get install build-essential
-&lt;span class="gp"&gt;$ &lt;/span&gt;sudo apt-get install git
-&lt;span class="gp"&gt;$ &lt;/span&gt;sudo apt-get install gdb
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id="configuring-and-building"&gt;Configuring and Building&lt;/h4&gt;
-
-&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; &lt;span class="nv"&gt;$DIR_TO_HOST_MOSQUITTO_CLONE&lt;/span&gt;
-&lt;span class="gp"&gt;$ &lt;/span&gt;mkdir mosquitto
-&lt;span class="gp"&gt;$ &lt;/span&gt;git clone http://git.eclipse.org/gitroot/mosquitto/org.eclipse.mosquitto.git mosquitto
-&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;mosquitto
-&lt;span class="c"&gt;# Read build requirements and steps.&lt;/span&gt;
-&lt;span class="gp"&gt;$ &lt;/span&gt;less compiling.txt
-&lt;span class="c"&gt;# Disable some features to reduce dependencies.&lt;/span&gt;
-&lt;span class="gp"&gt;$ &lt;/span&gt;cp -v config.mk config.mk.orig
-&lt;span class="gp"&gt;$ &lt;/span&gt;sed -e &lt;span class="s1"&gt;'s/^\(WITH_TLS:=\).*$/\1=no/'&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
-    -e &lt;span class="s1"&gt;'s/^\(WITH_TLS_PSK:=\).*/\1=no/'&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
-    -e &lt;span class="s1"&gt;'s/^\(WITH_SRV:=\).*/\1=no/'&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
-    -e &lt;span class="s1"&gt;'s/^\(WITH_UUID:=\).*/\1=no/'&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
-    config.mk.orig &amp;gt; config.mk
-&lt;span class="c"&gt;# Build.&lt;/span&gt;
-&lt;span class="gp"&gt;$ &lt;/span&gt;make
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id="testing-mosquitto"&gt;Testing Mosquitto&lt;/h3&gt;
-
-&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;lib
-&lt;span class="gp"&gt;$ &lt;/span&gt;sudo ldconfig
-&lt;span class="c"&gt;# Launch the broker&lt;/span&gt;
-&lt;span class="gp"&gt;$ &lt;/span&gt;src/mosquitto -v &amp;amp;
-&lt;span class="c"&gt;# Sending PUBLISH message to the broker with topic being "topic" and QoS being 2.&lt;/span&gt;
-&lt;span class="c"&gt;#    -h hostname-to-connect&lt;/span&gt;
-&lt;span class="c"&gt;#    -q QoS-value&lt;/span&gt;
-&lt;span class="gp"&gt;$ &lt;/span&gt;client/mosquitto_pub -h localhost -t topic -m message -q 2
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id="output"&gt;Output&lt;/h4&gt;
-
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;xxxxxxxxxx: New connection from 127.0.0.1 on port 1883.
-xxxxxxxxxx: New client connected from 127.0.0.1 as mosqpub/xxx (c1, k60).
-xxxxxxxxxx: Sending CONNACK to mosqpub/xxx (0, 0)
-xxxxxxxxxx: Received PUBLISH from mosqpub/xxx (d0, q2, r0, m1, 'topic', ... (7 bytes))
-xxxxxxxxxx: Sending PUBREC to mosqpub/xxx (Mid: 1)
-xxxxxxxxxx: Received PUBREL from mosqpub/xxx (Mid: 1)
-xxxxxxxxxx: Sending PUBCOMP to mosqpub/xxx (Mid: 1)
-xxxxxxxxxx: Received DISCONNECT from mosqpub/xxx
-xxxxxxxxxx: Client mosqpub/xxx disconnected.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id="testing-retransmission-using-gdb"&gt;Testing Retransmission using GDB&lt;/h3&gt;
-
-&lt;p&gt;Assuming that the mosquitto broker is running background at port 1883 on localhost, we publish a retained message, launch a subscriber to receive that message and then interrupt the conversation with GDB to see the broker resend the same message.&lt;/p&gt;
-
-&lt;h4 id="publishing-a-retained-message"&gt;Publishing a Retained Message&lt;/h4&gt;
-
-&lt;p&gt;The following command publishes a message of topic "topic" with QoS 2 and makes the broker retain it for future subscribers.&lt;/p&gt;
-
-&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="c"&gt;# The -r option makes this message retained on the server.&lt;/span&gt;
-&lt;span class="gp"&gt;$ &lt;/span&gt;client/mosquitto_pub -h localhost -t topic -m message -q 2 -r
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id="launching-a-subscriber-in-gdb-session"&gt;Launching a Subscriber in GDB session&lt;/h4&gt;
-
-&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;gdb client/mosquitto_sub
-&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# Stop the process from responding to PUBREL messages.&lt;/span&gt;
-&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; b _mosquitto_handle_pubrel
-&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# Run the subscriber with debugging output enabled (-d) and client ID being "c1".&lt;/span&gt;
-&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; run -d -h localhost -t topic -q 2 -i c1
-Starting program: client/mosquitto_sub -d -h localhost -t topic -q 2 -i c1
-xxxxxxxxxx: New connection from 127.0.0.1 on port 1883.
-Client c1 sending CONNECT
-xxxxxxxxxx: New client connected from 127.0.0.1 as c1 &lt;span class="o"&gt;(&lt;/span&gt;c1, k60&lt;span class="o"&gt;)&lt;/span&gt;.
-xxxxxxxxxx: Sending CONNACK to c1 &lt;span class="o"&gt;(&lt;/span&gt;0, 0&lt;span class="o"&gt;)&lt;/span&gt;
-Client c1 received CONNACK
-Client c1 sending SUBSCRIBE &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1, Topic: topic, QoS: 2&lt;span class="o"&gt;)&lt;/span&gt;
-xxxxxxxxxx: Received SUBSCRIBE from c1
-xxxxxxxxxx:     topic &lt;span class="o"&gt;(&lt;/span&gt;QoS 2&lt;span class="o"&gt;)&lt;/span&gt;
-xxxxxxxxxx: c1 2 topic
-xxxxxxxxxx: Sending SUBACK to c1
-xxxxxxxxxx: Sending PUBLISH to c1 &lt;span class="o"&gt;(&lt;/span&gt;d0, q2, r1, m1, &lt;span class="s1"&gt;'topic'&lt;/span&gt;, ... &lt;span class="o"&gt;(&lt;/span&gt;7 bytes&lt;span class="o"&gt;))&lt;/span&gt;
-Client c1 received SUBACK
-Subscribed &lt;span class="o"&gt;(&lt;/span&gt;mid: 1&lt;span class="o"&gt;)&lt;/span&gt;: 2
-Client c1 received PUBLISH &lt;span class="o"&gt;(&lt;/span&gt;d0, q2, r1, m1, &lt;span class="s1"&gt;'topic'&lt;/span&gt;, ... &lt;span class="o"&gt;(&lt;/span&gt;7 bytes&lt;span class="o"&gt;))&lt;/span&gt;
-Client c1 sending PUBREC &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
-xxxxxxxxxx: Received PUBREC from c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
-xxxxxxxxxx: Sending PUBREL to c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
-
-Breakpoint 1, _mosquitto_handle_pubrel &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;db&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0x0, &lt;span class="nv"&gt;mosq&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0x6070c0&lt;span class="o"&gt;)&lt;/span&gt;
-    at read_handle_shared.c:119
-
-&lt;span class="c"&gt;# Wait for 20 seconds ... and the server retransmit the PUBREL message.&lt;/span&gt;
-xxxxxxxxxx: Sending PUBREL to c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
-
-&lt;span class="c"&gt;# If we keep waiting here, the server retransmit the same message repeatedly.&lt;/span&gt;
-&lt;span class="c"&gt;# The retransmission interval can be set with `retry_interval` in a config file.&lt;/span&gt;
-xxxxxxxxxx: Sending PUBREL to c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
-xxxxxxxxxx: Sending PUBREL to c1 &lt;span class="o"&gt;(&lt;/span&gt;Mid: 1&lt;span class="o"&gt;)&lt;/span&gt;
-
-&lt;span class="c"&gt;# Run the c (continue) command to make the process respond to the first PUBREL.&lt;/span&gt;
-&lt;span class="o"&gt;(&lt;/span&gt;gdb&lt;span class="o"&gt;)&lt;/span&gt; c
-
-&lt;span class="c"&gt;# The breakpoint seems to hit as many times as the server has retransmitted.&lt;/span&gt;
-...
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id="changing-retryinterval"&gt;Changing retry_interval&lt;/h4&gt;
-
-&lt;p&gt;The config file can be supplied to the broker with the &lt;code&gt;-c&lt;/code&gt; option.&lt;/p&gt;
-
-&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="c"&gt;# Here we use the default config file in the workspace.&lt;/span&gt;
-&lt;span class="c"&gt;# Change the retry_interval variable.&lt;/span&gt;
-&lt;span class="gp"&gt;$ &lt;/span&gt;vim mosquitto.conf
-&lt;span class="c"&gt;# Launch the broker.&lt;/span&gt;
-&lt;span class="gp"&gt;$ &lt;/span&gt;src/mosquitto -v -c mosquitto.conf
-&lt;/code&gt;&lt;/pre&gt;
 </content>
   </entry>
 </feed>
