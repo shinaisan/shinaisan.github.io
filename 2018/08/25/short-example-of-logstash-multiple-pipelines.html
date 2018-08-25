@@ -3,10 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta content="IE=edge;chrome=1" http-equiv="X-UA-Compatible" />
-    <title>My gh-pages | Trying out git-submodule</title>
-    <meta content="<p>T/O</p>
-
-<p>" name="description" />
+    <title>My gh-pages | Short Example of Logstash Multiple Pipelines</title>
+    <meta content="<p>" name="description" />
     <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" /><!--[if lt IE 9]><script src="../../../js/ie8.js" type="text/javascript"></script><![endif]--><link href="../../../css/all.css" media="screen" rel="stylesheet" type="text/css" /><script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   </head>
   <body>
@@ -209,22 +207,194 @@
         </div>
         <div class="col-lg-9 col-md-9">
           <h1>
-            Trying out git-submodule
+            Short Example of Logstash Multiple Pipelines
           </h1>
-          <small class="label label-default">Git</small>
+          <small class="label label-default">Logstash</small>
+          <small class="label label-default">Elasticsearch</small>
+          <small class="label label-default">Kibana</small>
+          <small class="label label-default">Filebeat</small>
+          <small class="label label-default">Elastic</small>
           <small class="label label-default">Snippet</small>
           <hr />
           <p>
-            <span class="glyphicon glyphicon-time"></span> Posted on Aug  2
+            <span class="glyphicon glyphicon-time"></span> Posted on Aug 25
           </p>
-          <hr />
-          <p>T/O</p>
-          
-          <p></p>
-          
-          <script src="https://gist.github.com/shinaisan/85292c94d9c15a60abd4.js"></script>
-          
-          
+          <hr /><p></p>
+
+<h2 id="short-example-of-logstash-multiple-pipelines">Short Example of Logstash Multiple Pipelines</h2>
+
+<p>I trid out Logstash
+<a href="https://www.elastic.co/guide/en/logstash/6.3/multiple-pipelines.html">Multiple Pipelines</a>
+just for practice purpose.</p>
+
+<ul>
+  <li><a href="https://gist.github.com/shinaisan/78f3a3ad1ab50cab1d3ff32983454987">Gist</a></li>
+</ul>
+
+<p>The following summary assumes that
+the <code>PATH</code> contains Logstash and Filebeat executables
+and they run locally on <code>localhost</code>.</p>
+
+<h2 id="logstash-config">Logstash config</h2>
+
+<h3 id="pipelinesyml"><code>pipelines.yml</code></h3>
+
+<p>This file refers to two pipeline configs <code>pipeline1.config</code> and <code>pipeline2.config</code>.</p>
+
+<pre class="highlight plaintext"><code>- pipeline.id: pipeline_1
+  path.config: "pipeline1.config"
+- pipeline.id: pipeline_2
+  path.config: "pipeline2.config"
+</code></pre>
+<p>Unlike <code>logstash.yml</code>, environment variables cannot be used in the <code>pipelines.yml</code>
+for some reason.
+See <a href="https://github.com/elastic/logstash/issues/8452">Issue #8452</a>.</p>
+
+<p>Each <code>path.config</code> here specifies only a file name,
+so Logstash has to be launched from the directory
+where the following config files reside.</p>
+
+<h3 id="pipeline1config"><code>pipeline1.config</code></h3>
+
+<p>Deals with syslog line input and listens to port 5044.</p>
+
+<pre class="highlight plaintext"><code>input {
+    beats {
+        port =&gt; "5044"
+    }
+}
+filter {
+    grok {
+        match =&gt; { "message" =&gt; "%{SYSLOGLINE}"}
+    }
+}
+output {
+    stdout { codec =&gt; rubydebug }
+}
+</code></pre>
+<h3 id="pipeline2config"><code>pipeline2.config</code></h3>
+
+<p>Deals with Apache log input and listens to port 5045.</p>
+
+<pre class="highlight plaintext"><code>input {
+    beats {
+        port =&gt; "5045"
+    }
+}
+filter {
+    grok {
+        match =&gt; { "message" =&gt; "%{COMBINEDAPACHELOG}"}
+    }
+    geoip {
+        source =&gt; "clientip"
+    }
+}
+output {
+    stdout { codec =&gt; rubydebug }
+}
+</code></pre>
+<p>Almost the same as the example found in
+<a href="https://www.elastic.co/guide/en/logstash/6.3/advanced-pipeline.html">Parsing Logs with Logstash</a>.</p>
+
+<h2 id="run-logstash">Run Logstash</h2>
+
+<p>Here we set <code>--path.settings</code> just to let Logstash point to
+our <code>$THIS_GIST_DIR</code> to look for config files.
+We have to make sure not to specify <code>-f</code> option
+because Logstash reads <code>pipelines.yml</code> by default.</p>
+
+<pre class="highlight plaintext"><code>pushd $THIS_GIST_DIR
+mkdir data
+mkdir logs
+logstash --path.settings $THIS_GIST_DIR --path.logs $THIS_GIST_DIR/logs --path.data $THIS_GIST_DIR/data
+</code></pre>
+<h2 id="first-filebeat">First Filebeat</h2>
+
+<p>The first filebeat config is <code>filebeat1.yml</code>
+that specifies only <code>syslog</code> in the <code>paths</code> setting.</p>
+
+<pre class="highlight plaintext"><code>filebeat.inputs:
+- type: log
+  paths:
+    - syslog
+output.logstash:
+  hosts: ["localhost:5044"]
+</code></pre>
+<p>Here we use a copy of syslog as an input.</p>
+
+<pre class="highlight plaintext"><code># Works only if syslog is written in /var/log...
+cp /var/log/syslog $THIS_GIST_DIR/
+</code></pre>
+<p>If the previous <code>registry</code> file of Filebeat remains, we remove it.</p>
+
+<pre class="highlight plaintext"><code>rm -i $THIS_GIST_DIR/data/registry
+</code></pre>
+<p>Now we can try Filebeat and see Logstash emits filtered output onto stdout.</p>
+
+<pre class="highlight plaintext"><code>pushd $THIS_GIST_DIR
+mkdir data
+mkdir logs
+filebeat --path.home $THIS_GIST_DIR -c filebeat1.yml
+</code></pre>
+<p>After all the log lines are printed, we can shutdown Filebeat, e.g. by CTRL-C.</p>
+
+<h2 id="second-filebeat">Second Filebeat</h2>
+
+<pre class="highlight plaintext"><code>filebeat.inputs:
+- type: log
+  paths:
+    - logstash-tutorial.log
+output.logstash:
+  hosts: ["localhost:5045"]
+</code></pre>
+<p>For the second pipeline, we download a sample Apache log file from
+<a href="https://download.elastic.co/demos/logstash/gettingstarted/logstash-tutorial.log.gz">logstash-tutorial.log</a>
+and unzip it to obtain <code>logstash-tutorial.log</code>.
+This file can also be found from
+<a href="https://www.elastic.co/guide/en/logstash/6.3/advanced-pipeline.html">Parsing Logs with Logstash</a>.</p>
+
+<p>This time, Logstash emits parsed Apache log onto stdout.</p>
+
+<pre class="highlight plaintext"><code>pushd $THIS_GIST_DIR
+mkdir data
+mkdir logs
+filebeat -path.home $THIS_GIST_DIR -c filebeat2.yml
+</code></pre>
+<h2 id="output-to-elasticsearch">Output to Elasticsearch</h2>
+
+<p>By replacing the output in the <code>pipeline{1,2}.config</code> with the following one,
+we can direct filtered log outputs to Elasticsearch.</p>
+
+<pre class="highlight plaintext"><code>output {
+    elasticsearch {
+        hosts =&gt; [ "localhost:9200" ]
+    }
+}
+</code></pre>
+<p>Then we can issue a search query like below from the Dev Tools Console of Kibana.</p>
+
+<pre class="highlight plaintext"><code>GET /logstash-*/_search
+{
+  "query": {
+    "match": {
+      "program.keyword": "cron"
+    }
+  }
+}
+</code></pre>
+<h2 id="references">References</h2>
+
+<ul>
+  <li><a href="https://www.elastic.co/guide/en/logstash/6.3/multiple-pipelines.html">Multiple Pipelines</a></li>
+  <li><a href="https://www.elastic.co/guide/en/logstash/6.3/advanced-pipeline.html">Parsing Logs with Logstash</a>.</li>
+  <li><a href="https://www.elastic.co/guide/en/logstash/6.3/running-logstash-command-line.html">Running Logstash from the Command Line</a></li>
+  <li><a href="https://www.elastic.co/guide/en/logstash/6.3/plugins-outputs-elasticsearch.html">Elasticsearch output plugin</a></li>
+  <li><a href="https://www.elastic.co/guide/en/beats/filebeat/6.3/command-line-options.html">Filebeat command reference</a></li>
+  <li><a href="https://www.elastic.co/guide/en/beats/filebeat/6.3/filebeat-input-log.html">Log input / Filebeat</a></li>
+  <li><a href="https://www.elastic.co/guide/en/beats/filebeat/6.3/logstash-output.html">Configure the Logstash output / Filebeat</a></li>
+</ul>
+
+
           <aside>
             <h3>
               Recent Articles

@@ -5,10 +5,196 @@
   <id>http://shinaisan.github.io</id>
   <link href="http://shinaisan.github.io"/>
   <link href="http://shinaisan.github.io/feed.xml" rel="self"/>
-  <updated>2018-08-18T05:56:00Z</updated>
+  <updated>2018-08-25T06:37:00Z</updated>
   <author>
     <name>M. Shiina</name>
   </author>
+  <entry>
+    <title>Short Example of Logstash Multiple Pipelines</title>
+    <link rel="alternate" href="http://shinaisan.github.io/2018/08/25/short-example-of-logstash-multiple-pipelines.html"/>
+    <id>http://shinaisan.github.io/2018/08/25/short-example-of-logstash-multiple-pipelines.html</id>
+    <published>2018-08-25T06:37:00Z</published>
+    <updated>2018-08-25T16:07:59+09:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id="short-example-of-logstash-multiple-pipelines"&gt;Short Example of Logstash Multiple Pipelines&lt;/h2&gt;
+
+&lt;p&gt;I trid out Logstash
+&lt;a href="https://www.elastic.co/guide/en/logstash/6.3/multiple-pipelines.html"&gt;Multiple Pipelines&lt;/a&gt;
+just for practice purpose.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://gist.github.com/shinaisan/78f3a3ad1ab50cab1d3ff32983454987"&gt;Gist&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The following summary assumes that
+the &lt;code&gt;PATH&lt;/code&gt; contains Logstash and Filebeat executables
+and they run locally on &lt;code&gt;localhost&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id="logstash-config"&gt;Logstash config&lt;/h2&gt;
+
+&lt;h3 id="pipelinesyml"&gt;&lt;code&gt;pipelines.yml&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;This file refers to two pipeline configs &lt;code&gt;pipeline1.config&lt;/code&gt; and &lt;code&gt;pipeline2.config&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;- pipeline.id: pipeline_1
+  path.config: "pipeline1.config"
+- pipeline.id: pipeline_2
+  path.config: "pipeline2.config"
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Unlike &lt;code&gt;logstash.yml&lt;/code&gt;, environment variables cannot be used in the &lt;code&gt;pipelines.yml&lt;/code&gt;
+for some reason.
+See &lt;a href="https://github.com/elastic/logstash/issues/8452"&gt;Issue #8452&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Each &lt;code&gt;path.config&lt;/code&gt; here specifies only a file name,
+so Logstash has to be launched from the directory
+where the following config files reside.&lt;/p&gt;
+
+&lt;h3 id="pipeline1config"&gt;&lt;code&gt;pipeline1.config&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Deals with syslog line input and listens to port 5044.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;input {
+    beats {
+        port =&amp;gt; "5044"
+    }
+}
+filter {
+    grok {
+        match =&amp;gt; { "message" =&amp;gt; "%{SYSLOGLINE}"}
+    }
+}
+output {
+    stdout { codec =&amp;gt; rubydebug }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="pipeline2config"&gt;&lt;code&gt;pipeline2.config&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Deals with Apache log input and listens to port 5045.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;input {
+    beats {
+        port =&amp;gt; "5045"
+    }
+}
+filter {
+    grok {
+        match =&amp;gt; { "message" =&amp;gt; "%{COMBINEDAPACHELOG}"}
+    }
+    geoip {
+        source =&amp;gt; "clientip"
+    }
+}
+output {
+    stdout { codec =&amp;gt; rubydebug }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Almost the same as the example found in
+&lt;a href="https://www.elastic.co/guide/en/logstash/6.3/advanced-pipeline.html"&gt;Parsing Logs with Logstash&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id="run-logstash"&gt;Run Logstash&lt;/h2&gt;
+
+&lt;p&gt;Here we set &lt;code&gt;--path.settings&lt;/code&gt; just to let Logstash point to
+our &lt;code&gt;$THIS_GIST_DIR&lt;/code&gt; to look for config files.
+We have to make sure not to specify &lt;code&gt;-f&lt;/code&gt; option
+because Logstash reads &lt;code&gt;pipelines.yml&lt;/code&gt; by default.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;pushd $THIS_GIST_DIR
+mkdir data
+mkdir logs
+logstash --path.settings $THIS_GIST_DIR --path.logs $THIS_GIST_DIR/logs --path.data $THIS_GIST_DIR/data
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="first-filebeat"&gt;First Filebeat&lt;/h2&gt;
+
+&lt;p&gt;The first filebeat config is &lt;code&gt;filebeat1.yml&lt;/code&gt;
+that specifies only &lt;code&gt;syslog&lt;/code&gt; in the &lt;code&gt;paths&lt;/code&gt; setting.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;filebeat.inputs:
+- type: log
+  paths:
+    - syslog
+output.logstash:
+  hosts: ["localhost:5044"]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here we use a copy of syslog as an input.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;# Works only if syslog is written in /var/log...
+cp /var/log/syslog $THIS_GIST_DIR/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If the previous &lt;code&gt;registry&lt;/code&gt; file of Filebeat remains, we remove it.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;rm -i $THIS_GIST_DIR/data/registry
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we can try Filebeat and see Logstash emits filtered output onto stdout.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;pushd $THIS_GIST_DIR
+mkdir data
+mkdir logs
+filebeat --path.home $THIS_GIST_DIR -c filebeat1.yml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;After all the log lines are printed, we can shutdown Filebeat, e.g. by CTRL-C.&lt;/p&gt;
+
+&lt;h2 id="second-filebeat"&gt;Second Filebeat&lt;/h2&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;filebeat.inputs:
+- type: log
+  paths:
+    - logstash-tutorial.log
+output.logstash:
+  hosts: ["localhost:5045"]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For the second pipeline, we download a sample Apache log file from
+&lt;a href="https://download.elastic.co/demos/logstash/gettingstarted/logstash-tutorial.log.gz"&gt;logstash-tutorial.log&lt;/a&gt;
+and unzip it to obtain &lt;code&gt;logstash-tutorial.log&lt;/code&gt;.
+This file can also be found from
+&lt;a href="https://www.elastic.co/guide/en/logstash/6.3/advanced-pipeline.html"&gt;Parsing Logs with Logstash&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This time, Logstash emits parsed Apache log onto stdout.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;pushd $THIS_GIST_DIR
+mkdir data
+mkdir logs
+filebeat -path.home $THIS_GIST_DIR -c filebeat2.yml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="output-to-elasticsearch"&gt;Output to Elasticsearch&lt;/h2&gt;
+
+&lt;p&gt;By replacing the output in the &lt;code&gt;pipeline{1,2}.config&lt;/code&gt; with the following one,
+we can direct filtered log outputs to Elasticsearch.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;output {
+    elasticsearch {
+        hosts =&amp;gt; [ "localhost:9200" ]
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then we can issue a search query like below from the Dev Tools Console of Kibana.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;GET /logstash-*/_search
+{
+  "query": {
+    "match": {
+      "program.keyword": "cron"
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="references"&gt;References&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/logstash/6.3/multiple-pipelines.html"&gt;Multiple Pipelines&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/logstash/6.3/advanced-pipeline.html"&gt;Parsing Logs with Logstash&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/logstash/6.3/running-logstash-command-line.html"&gt;Running Logstash from the Command Line&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/logstash/6.3/plugins-outputs-elasticsearch.html"&gt;Elasticsearch output plugin&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/beats/filebeat/6.3/command-line-options.html"&gt;Filebeat command reference&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/beats/filebeat/6.3/filebeat-input-log.html"&gt;Log input / Filebeat&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/beats/filebeat/6.3/logstash-output.html"&gt;Configure the Logstash output / Filebeat&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
   <entry>
     <title>Greedy Set Cover Sample Implementation</title>
     <link rel="alternate" href="http://shinaisan.github.io/2018/08/18/greedy-set-cover-sample-implementation.html"/>
@@ -1012,115 +1198,6 @@ and select columns of interest.&lt;/p&gt;
 Cytoscape.js: a graph theory library for visualisation and analysis&lt;br /&gt;
 &lt;a href="http://bioinformatics.oxfordjournals.org/content/32/2/309"&gt;Bioinformatics (2016) 32 (2): 309-311 first published online September 28, 2015 doi:10.1093/bioinformatics/btv557&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href="https://github.com/jeremyevans/sequel"&gt;jeremyevans/sequel: Sequel: The Database Toolkit for Ruby&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-</content>
-  </entry>
-  <entry>
-    <title>Browsing Task Dependencies in the Rakefile of mruby using jsTree</title>
-    <link rel="alternate" href="http://shinaisan.github.io/2015/12/22/browsing-task-dependencies-in-the-rakefile-of-mruby-using-jstree.html"/>
-    <id>http://shinaisan.github.io/2015/12/22/browsing-task-dependencies-in-the-rakefile-of-mruby-using-jstree.html</id>
-    <published>2015-12-22T14:14:00Z</published>
-    <updated>2017-04-21T07:46:05+09:00</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;p&gt;Building mruby is not just about compiling C sources and linking objects together but also contains some nontrivial steps like invocation of mrbc that is also built with the mruby build system.
-The Rakefiles of mruby are not easy read. To get a better grasp of what the task dependency structure looks like, I had to create a visual aid below.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h3 id="browsing-dependency-tree-strucutre"&gt;Browsing Dependency Tree Strucutre&lt;/h3&gt;
-
-&lt;div&gt;
-&lt;script type="text/javascript" src="http://jsdo.it/blogparts/Cf9i/js?width=800&amp;amp;height=496&amp;amp;view=readme"&gt;&lt;/script&gt;
-&lt;/div&gt;
-
-&lt;p&gt;This tree view allows us to navigate from the root &lt;code&gt;all&lt;/code&gt; node to every task it depends. Some nodes are links to another node that is typically a library or a tool that is referred from many other tasks. This linking feature is for preventing the tree from repeating the same substructures and eventually growing too big.&lt;/p&gt;
-
-&lt;p&gt;Some nodes contain additional information that is displayed on the right side. Currently it contains only "defining actions" indicating the location of its definition.&lt;/p&gt;
-
-&lt;p&gt;By traversing the tree structure, I could make some inferences below whether they be correct or not …&lt;/p&gt;
-
-&lt;h4 id="libmrubya-forms-the-basis-for-the-main-executable-targets"&gt;libmruby.a forms the basis for the main executable targets&lt;/h4&gt;
-
-&lt;p&gt;&lt;img alt="libmruby.a" src="../../../images/img-2015-12-22/libmruby_a.png" /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code&gt;mruby&lt;/code&gt; and &lt;code&gt;mirb&lt;/code&gt; depend on it.&lt;/li&gt;
-  &lt;li&gt;&lt;code&gt;mrbc&lt;/code&gt; does not but depends on &lt;code&gt;libmruby_core.a&lt;/code&gt; that looks much alike &lt;code&gt;libmruby.a&lt;/code&gt; but does not contain mrbgems.&lt;/li&gt;
-  &lt;li&gt;&lt;code&gt;mrbtest&lt;/code&gt; depends on both &lt;code&gt;libmruby.a&lt;/code&gt; and &lt;code&gt;libmruby_core.a&lt;/code&gt; for some reason. (Would someone please tell me why?)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id="mrbc-is-used-to-generate-geminitc"&gt;&lt;code&gt;mrbc&lt;/code&gt; is used to generate geminit.c&lt;/h4&gt;
-
-&lt;p&gt;&lt;img alt="mrbc" src="../../../images/img-2015-12-22/geminit_c_and_mrbc.png" /&gt;&lt;/p&gt;
-
-&lt;p&gt;For example, &lt;code&gt;mrbgems/mruby-sprintf/gem_init.o&lt;/code&gt; seems to be compiled from &lt;code&gt;gem_init.c&lt;/code&gt; that depends on &lt;code&gt;mrbc&lt;/code&gt; and a Ruby script in &lt;code&gt;mrblib&lt;/code&gt;.
-This suggests that &lt;code&gt;mrbc&lt;/code&gt; generates a part of or all of the &lt;code&gt;gem_init.c&lt;/code&gt;.
-Browsing the C source soon reveals a byte-code looking code snippet that presumably is the output of &lt;code&gt;mrbc&lt;/code&gt; taking the mrblib as an input.
-I am not sure why &lt;code&gt;gem_init.c&lt;/code&gt; depends on &lt;code&gt;tasks/mrbgem_spec.rake&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id="the-ruby-scripts-in-testt-convert-into-c-source-to-build-mrbtest"&gt;The Ruby scripts in &lt;code&gt;test/t/&lt;/code&gt; convert into C source to build &lt;code&gt;mrbtest&lt;/code&gt;&lt;/h4&gt;
-
-&lt;p&gt;&lt;img alt="mrbtest" src="../../../images/img-2015-12-22/mrbtest_Dependency.png" /&gt;&lt;/p&gt;
-
-&lt;p&gt;It was not clear to me what the scripts in &lt;code&gt;test/t&lt;/code&gt; directory are for.
-The dependency tree gave me a hint that the &lt;code&gt;mrbc&lt;/code&gt; tool is used to generate a part of &lt;code&gt;mrbtest&lt;/code&gt;. The &lt;code&gt;mrbtest&lt;/code&gt; tool depends also on &lt;code&gt;mrbtest.a&lt;/code&gt; that seems to be a collection of &lt;code&gt;gem_test.o&lt;/code&gt;-s. Again, by walking down into each of their subtrees, another use case of &lt;code&gt;mrbc&lt;/code&gt; can be found.&lt;/p&gt;
-
-&lt;h3 id="about-data-extraction-and-visualization"&gt;About Data Extraction and Visualization&lt;/h3&gt;
-
-&lt;h4 id="ruby"&gt;Ruby&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href="https://gist.github.com/shinaisan/c3a359334c2f8ae137d4"&gt;This script (Gist)&lt;/a&gt; extracts the task dependencies of mruby.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;The script tries collecting all the tasks defined in the Rakefile. My first bet was that &lt;code&gt;MiniRake::Task.tasks&lt;/code&gt; would do the trick but actually it does not. I had to recursively traverse the dependency tree with the help of the &lt;code&gt;prerequisites&lt;/code&gt; parameter of a task. The method &lt;code&gt;Jstree::TaskInfo.all&lt;/code&gt; is written to this end and is called from the constructor of &lt;code&gt;Jstree::Graph&lt;/code&gt; that is the main class of the above script.&lt;/li&gt;
-  &lt;li&gt;An instance of &lt;code&gt;Jstree::Graph&lt;/code&gt; has nodes each of which represents one of the tasks in the Rakefile but does not have edges. The instance method &lt;code&gt;construct&lt;/code&gt; gives edges to the dependency graph instance.&lt;/li&gt;
-  &lt;li&gt;The instance method &lt;code&gt;to_json&lt;/code&gt; is called after the graph construction. Its first parameter takes the root task name. Its second parameter &lt;code&gt;roots&lt;/code&gt; takes names of tasks that are treated as leaf nodes that stop recursive call to the method. The &lt;code&gt;roots&lt;/code&gt; parameter is intended to serve as a list of root task names each of which is passed to the method as its first argument.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id="javascript"&gt;JavaScript&lt;/h4&gt;
-
-&lt;p&gt;The above Ruby script &lt;code&gt;jstree.rb&lt;/code&gt; produces a JSON file &lt;code&gt;jstree.json&lt;/code&gt;. This JSON file contains the definition of a variable &lt;code&gt;json&lt;/code&gt; (&lt;code&gt;var json = [ ... ];&lt;/code&gt;) that can be directly supplied to the jsTree library like below:&lt;/p&gt;
-
-&lt;pre class="highlight javascript"&gt;&lt;code&gt;    &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"#tree-view-area"&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;jstree&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
-        &lt;span class="s2"&gt;"core"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="s2"&gt;"data"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;json&lt;/span&gt;
-        &lt;span class="p"&gt;}&lt;/span&gt;
-    &lt;span class="p"&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Here is the excerpt of the JSON file. In the following JSON data, only the &lt;code&gt;text&lt;/code&gt; and &lt;code&gt;children&lt;/code&gt; parameters matter to jsTree. The &lt;code&gt;info&lt;/code&gt; parameter is something like an extra user parameter.
-The &lt;code&gt;jstree&lt;/code&gt; function does not care about it and seems to drop such extra parameters from the object returned by the &lt;a href="https://www.jstree.com/api/#/?f=get_node"&gt;&lt;code&gt;get_node&lt;/code&gt; API&lt;/a&gt;.
-Luckily however, it holds the original JSON data in the &lt;code&gt;original&lt;/code&gt; parameter. So my own &lt;code&gt;info&lt;/code&gt; parameter can be accessed in such a way as to say &lt;code&gt;data.instance.get_node(data.selected[0]).original.info&lt;/code&gt; in jsTree event handlers.
-There is also another extra parameter &lt;code&gt;jump&lt;/code&gt; in the output (not in the excerpt below) that is used to implement jumping from node to node.&lt;/p&gt;
-
-&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;json&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-    &lt;span class="c1"&gt;// snip&lt;/span&gt;
-      &lt;span class="p"&gt;{&lt;/span&gt;
-        &lt;span class="s2"&gt;"text"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"build/host/src/array.o"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s2"&gt;"info"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="s2"&gt;"defining_actions"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"tasks/mruby_build_commands.rake:104"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt;
-        &lt;span class="s2"&gt;"children"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-          &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="s2"&gt;"text"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"src/array.c"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-            &lt;span class="s2"&gt;"info"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="s2"&gt;"defining_actions"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt;
-            &lt;span class="s2"&gt;"children"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
-          &lt;span class="p"&gt;},&lt;/span&gt;
-          &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="s2"&gt;"text"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"build_config.rb"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-            &lt;span class="s2"&gt;"info"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="s2"&gt;"defining_actions"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt;
-            &lt;span class="s2"&gt;"children"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
-          &lt;span class="p"&gt;}&lt;/span&gt;
-        &lt;span class="p"&gt;]&lt;/span&gt;
-      &lt;span class="p"&gt;},&lt;/span&gt;
-    &lt;span class="c1"&gt;// snip&lt;/span&gt;
-&lt;span class="p"&gt;];&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id="references"&gt;References&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href="https://github.com/mruby/mruby"&gt;mruby/mruby - GitHub&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href="https://www.jstree.com/"&gt;jsTree&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 </content>
