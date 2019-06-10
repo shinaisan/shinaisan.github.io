@@ -2,583 +2,583 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://shinaisan.github.io/2015/08/02/trying-out-git-submodule.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/10/06/inspecting-the-retransmission-behavior-of-the-mosquitto-mqtt-broker-with-gdb.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/07/11/setting-up-python-virtualenv-with-virtualenvwrapper-on-ubuntu-ec2.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/11/24/latin-square-and-sudoku-solver-using-sat-solver-javascript-logic-solver.html</loc>
-    <lastmod>2017-11-26</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/09/03/making-menger-sponge-with-beetleblocks.html</loc>
-    <lastmod>2017-09-03</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/12/22/browsing-task-dependencies-in-the-rakefile-of-mruby-using-jstree.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/05/06/cytoscape-js-powered-interactive-graph-visualization-of-wordnet-synsets.html</loc>
-    <lastmod>2017-05-08</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/08/01/0-1-knapsack-problem-sample-implementation.html</loc>
-    <lastmod>2018-08-18</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/06/16/building-and-installing-ruby-with-rbenv-on-ubuntu-ec2.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/08/13/making-a-simple-image-viewer-using-react-and-express.html</loc>
-    <lastmod>2017-08-24</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2018/08/18/greedy-set-cover-sample-implementation.html</loc>
-    <lastmod>2018-08-22</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/07/31/some-practice-examples-of-range-minimum-query-rmq.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/06/03/starting-a-blog-with-middleman.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/08/05/example-of-read_until-parameter-of-bindata-array.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2018/08/25/short-example-of-logstash-multiple-pipelines.html</loc>
-    <lastmod>2018-08-25</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/search-engine-list.html</loc>
-    <lastmod>2018-08-28</lastmod>
+    <lastmod>2019-06-10</lastmod>
     <priority>1.0</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>1.0</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/git.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/snippet.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/gdb.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/debugging.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/mqtt.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/mosquitto.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/network.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/protocol.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/python.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/javascript.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/sudoku.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/math.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/combinatorics.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/latin_square.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/puzzle.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/sat.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/solver.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/3d.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/graphics.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/beetleblocks.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/visual.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/programming.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/fractal.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/ruby.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/mruby.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/graph.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/visualization.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/nlp.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/wordnet.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/c.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/algorithm.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/aws.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/ubuntu.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/rbenv.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/wikipedia.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/thumbnail.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/image.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/viewer.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/react.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/redux.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/react-router.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/bootstrap.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/express.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/node.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/middleman.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/bindata.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/logstash.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/elasticsearch.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/kibana.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/filebeat.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/tags/elastic.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2018.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>1.0</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2018/08.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2018/08/25.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2018/08/18.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>1.0</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/11.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/11/24.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/09.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/09/03.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/08.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/08/13.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/05.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2017/05/06.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>1.0</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/12.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/12/22.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/10.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/10/06.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/08.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/08/05.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/08/02.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/08/01.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/07.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/07/31.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/07/11.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/06.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/06/16.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/2015/06/03.html</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>http://shinaisan.github.io/page/2/</loc>
-    <lastmod>2017-04-21</lastmod>
+    <lastmod>2018-11-04</lastmod>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
