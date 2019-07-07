@@ -14,14 +14,15 @@
     <link rel="alternate" href="http://shinaisan.github.io/2019/07/07/javascript-port-of-computational-substrate-of-jared-tarbell.html"/>
     <id>http://shinaisan.github.io/2019/07/07/javascript-port-of-computational-substrate-of-jared-tarbell.html</id>
     <published>2019-07-07T13:16:00Z</published>
-    <updated>2019-07-07T22:23:27+09:00</updated>
+    <updated>2019-07-07T22:28:31+09:00</updated>
     <author>
       <name>Article Author</name>
     </author>
-    <content type="html">&lt;p&gt;My attempt to port the computational art work done by Jared Tarbell in JavaScript:
-&lt;a href="https://github.com/shinaisan/substrate-js"&gt;repo&lt;/a&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;My attempt to port the computational art work done by Jared Tarbell in JavaScript.&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/shinaisan/substrate-js"&gt;repo&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;The original can be found
 &lt;a href="http://www.complexification.net/gallery/machines/substrate/index.php"&gt;here&lt;/a&gt;.&lt;/p&gt;
