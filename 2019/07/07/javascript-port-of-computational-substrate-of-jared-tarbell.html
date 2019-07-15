@@ -245,6 +245,10 @@
 <p>The algorithm is quite simple yet the eventual city-like structure is amazing. At the beginning it just plants some random seeds on a canvas from which cracks grow.
 If a crack reaches the canvas border or touches another crack, a new crack perpendicularly branches out from an existing crack.</p>
 
+<h2 id="demo-page">Demo Page</h2>
+
+<p>The script can be tested on <a href="https://shinaisan.github.io/substrate-js/">the demo page</a> and you can see the rendering in motion.</p>
+
 <h2 id="files">Files</h2>
 
 <ul>
@@ -263,6 +267,30 @@ If a crack reaches the canvas border or touches another crack, a new crack perpe
 <p>In this variation, cracks slightly change their angle of moving direction along the way.</p>
 
 <p><img alt="ROUND" src="https://raw.githubusercontent.com/shinaisan/substrate-js/master/ROUND.JPG" /></p>
+
+<h2 id="note-on-script">Note on Script</h2>
+
+<h3 id="parameters">Parameters</h3>
+
+<ul>
+  <li><code>maxnum</code>: The maximum number of cracks. An instance of crack is spawned by a function <code>makeCrack</code>.</li>
+  <li><code>maxpal</code>: The maximum number of colors taken from the <code>IMG.PNG</code>.</li>
+</ul>
+
+<h3 id="data">Data</h3>
+
+<ul>
+  <li><code>cgrid</code>: An array linearized in such a way that a point (x,y) is translated into an index (dimx*y + x) in the array. An element corresponding to a (x, y) position contains an integral value of the angle (0-360) between the x-axis and the direction in which a crack on that point grows.</li>
+</ul>
+
+<h3 id="functionsmethods">Functions/Methods</h3>
+
+<ul>
+  <li><code>makeCrack</code> function: Spawns an instance of crack if there are less than <code>maxnum</code> instances. A crack stops growing when encountering another crack or the canvas boundary and at the same time it spawn a new crack with this function.</li>
+  <li><code>Crack</code> constructor: Creates an instance of crack. The initial position of a crack is determined by the <code>findStart</code> function.</li>
+  <li><code>Crack.findStart</code> method: As suggested by the name, it looks for a pixel of an existing crack or a "seed" pixel planted on the canvas and then employ the position of the pixel as a starting point of the crack instance.</li>
+  <li><code>Crack.move</code> method: Advances the x-y position of the crack instance. If the crack is found to be on another crack or out of bounds, it repositions itself by <code>findStart</code> and calls the <code>makeCrack</code> function to spawn new one.</li>
+</ul>
 
 
           <aside>
